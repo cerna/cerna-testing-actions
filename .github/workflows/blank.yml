@@ -41,7 +41,7 @@ jobs:
         ls main
         echo ---
         ls second
-        echo ***
+        echo 666666666666666666666666666666666
         ls third
         cd main
         git log --oneline --max-count 10
