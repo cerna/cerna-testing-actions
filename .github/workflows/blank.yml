@@ -1,4 +1,4 @@
-name: CI
+name: Basic action
 
 on: [push]
 
@@ -8,14 +8,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout main CAT repository
     - uses: actions/checkout@v2
       with:
         fetch-depth: '0'
+        path: main
+    - name: Checkou second GITHUB pages repository
+    - uses: actions/checkout@v2
+        with:
+          fetch-depth: '1'
+          path second
     - name: Run a one-line script
       run: echo Hello, world!
     - name: Run a multi-line script
       run: |
         echo Add other actions to build,
         echo test, and deploy your project.
+        pdw
+        ls
+        echo +++
+        ls main
+        echo ---
+        ls second
         git log --oneline --max-count 10
 
