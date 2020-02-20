@@ -1,4 +1,4 @@
-name: Basic action
+name: 'Basic action'
 
 on: [push]
 
