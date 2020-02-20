@@ -14,12 +14,19 @@ jobs:
         fetch-depth: '0'
         path: main
 
-    - name: Checkou second GITHUB pages repository
+    - name: Checkout second GITHUB pages repository
       uses: actions/checkout@v2
       with:
         repository: machinekit/machinekit.github.io
         fetch-depth: '1'
         path: second
+
+    - name: Checkout third GITHUB pages repository
+      uses: actions/checkout@v2
+        with:
+          repository: machinekit/machinekit-hal
+          fetch-depth: '0'
+          path: third
 
     - name: Run a one-line script
       run: echo Hello, world!
@@ -34,6 +41,10 @@ jobs:
         ls main
         echo ---
         ls second
+        echo ***
+        ls third
         cd main
+        git log --oneline --max-count 10
+        cd ../third
         git log --oneline --max-count 10
 
