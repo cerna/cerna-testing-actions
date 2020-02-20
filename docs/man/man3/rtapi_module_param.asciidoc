@@ -1,0 +1,96 @@
+---
+---
+:skip-front-matter:
+
+= rtapi_module_param
+:manmanual: HAL Components
+:mansource: ../man/man3/rtapi_module_param.asciidoc
+:man version : 
+
+
+== NAME
+
+**rtapi_module_param** -- Specifying module parameters
+
+
+
+== SYNTAX
+
+**RTAPI_MP_INT**(__var__, __description__)
+
+**RTAPI_MP_LONG**(__var__, __description__)
+
+**RTAPI_MP_STRING**(__var__, __description__)
+
+**RTAPI_MP_ARRAY_INT**(__var__, __num__, __description__)
+
+**RTAPI_MP_ARRAY_LONG**(__var__, __num__, __description__)
+
+**RTAPI_MP_ARRAY_STRING**(__var__, __num__, __description__)
+
+**MODULE_LICENSE**(__license__)
+
+**MODULE_AUTHOR**(__author__)
+
+**MODULE_DESCRIPTION**(__description__)
+
+**EXPORT_FUNCTION**(__function__)
+
+
+
+== ARGUMENTS
+__var__ +
+The variable where the parameter should be stored
+
+__description__ +
+A short description of the parameter or module
+
+__num__ +
+The maximum number of values for an array parameter
+
+__license__ +
+The license of the module, for instance "GPL"
+
+__author__ +
+The author of the module
+
+__function__ +
+The pointer to the function to be exported
+
+
+
+== DESCRIPTION
+These macros are portable ways to declare kernel module parameters.  +
+They must
+be used in the global scope, and are not followed by a terminating semicolon. +
+They must be used after the associated variable or function has been defined.
+
+
+
+== NOTES
+EXPORT_FUNCTION makes a symbol available for use by a subsequently loaded
+component.  +
+It is unrelated to hal functions, which are described in
+hal_export_funct
+
+[NOTE]
+module params are persistant for the life of the module. +
+This does not cause problems with standard kernel modules, which are intended to
+be created and loaded once only. +
+When using instantiated components, a module param needs to be zeroed or nulled after
+the value is extracted by the component instance. +
+Otherwise, when the next instantiation of the component is created, that same value
+will be passed to it, unless explicitly set in the invocation.
+
+== Interpretation of license strings
+
+**MODULE_LICENSE** follows the kernel's definition of license strings.  +
+Notably, "GPL" indicates "GNU Public License v2 __or later__".  (emphasis ours).
+
+It is still good practice to include a license block which indicates the author,
+copyright date, and disclaimer of warranty as recommended by the GNU GPL.
+
+(Yes, __license__ should be spelt __licence__. Blame the US 'dumb down' of English grammar)
+
+== REALTIME CONSIDERATIONS
+Not available in userspace code.

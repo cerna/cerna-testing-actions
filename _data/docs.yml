@@ -1,0 +1,26 @@
+- title: For starters
+  docs:
+    - site/about-this-site
+    - index-getting-started
+    - index-user
+    - index-HAL
+    - getting-help
+
+- title: Developing
+  docs:
+    - index-integrator
+    - index-developer
+    - index-documenting
+    - developing/develop-index
+    - developing/qtquickvcp
+
+- title: Manpages
+  docs:
+    - man/man1
+    - man/man3
+    - man/man9
+
+- title: Project Infrastructure
+  docs:
+    - infra/repositories
+

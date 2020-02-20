@@ -1,0 +1,667 @@
+---
+---
+:skip-front-matter:
+
+= linuxcncrsh
+:manmanual: HAL Components
+:mansource: ../man/man1/linuxcncrsh.asciidoc
+:man version : 
+
+
+== NAME
+linuxcncrsh -- text-mode interface for commanding Machinekit over the network
+
+
+== SYNOPSIS
+linuxcncrsh [OPTIONS] [-- MACHINEKIT_OPTIONS]
+
+
+== DESCRIPTION
+**linuxcncrsh** is a user interface for Machinekit.  
+
+Instead of popping up a GUI window like axis and touchy do, it processes text-mode commands
+that it receives via the network. +
+A human (or a program) can interface with **linuxcncrsh** using telnet or nc or similar programs.
+
+All features of Machinekit are available via the **linuxcncrsh** interface.
+
+=== IMPORTANT NOTE:
+This interface is maintained for backwards compatibility and may be subject to removal without notice.
+
+If you thought **telnet** was an instrumental single by Hank Marvin or something connected
+to the Terminator movie franchise, this is definately not for you!
+
+Machinekit has much better remote networking options available through **QtQuickVCP** +
+http://www.machinekit.io/docs/developing/qtquickvcp/
+
+
+== OPTIONS
+**-p, --port** PORT_NUMBER +
+Specify the port for linuxcncrsh to listen on.  Defaults to 5007 if omitted.
+
+**-n, --name** SERVER_NAME +
+Sets the server name that linuxcncrsh will use to identify itself during
+handshaking with a new client.  Defaults to EMCNETSVR if omitted.
+
+**-w, --connectpw** PASSWORD +
+Specify the connection password to use during handshaking with a new
+client.  Note that the password is sent in the clear, so it can be read
+by anyone who can read packets on the network between the server and
+the client.  Defaults to EMC if omitted.
+
+**-e,--enablepw** PASSWORD +
+Specify the password required to enable Machinekit via linuxcncrsh.  Note that the
+password is sent in the clear, so it can be read by anyone who can read
+packets on the network between the server and the client.  Defaults to
+EMCTOO if omitted.
+
+**-s,--sessions** MAX_SESSIONS +
+Specify the maximum number of simultaneous connections.  Defaults to -1
+(no limit) if not specified.
+
+In addition to the options listed above, linuxcncrsh accepts an optional
+special MACHINEKIT_OPTION at the end:
+
+**-ini** INI_FILE +
+Machinekit .ini file to use.  The -ini option **must** be preceeded by two
+dashes: **"--"**.  Defaults to emc.ini if omitted.
+
+
+== Starting linuxcncrsh
+To use **linuxcncrsh** instead of a normal Machinekit GUI like axis or touch, specify
+it in your .ini file like this:
+
+[source, ini]
+----
+[DISPLAY]
+DISPLAY=linuxcncrsh
+----
+
+To use **linuxcncrsh** in addition to a normal GUI, you can either start it
+at the end of your .hal file, or run it by hand in a terminal window.
+
+To start it from hal, add a line like this to the end of your .hal file:
+[source, hal]
+----
+loadusr linuxcncrsh [OPTIONS] [-- MACHINEKIT_OPTIONS]
+----
+
+To start it from the terminal, run **linuxcncrsh** manually like this:
+
+[source,bash]
+----
+linuxcncrsh [OPTIONS] [-- MACHINEKIT_OPTIONS]
+----
+
+
+== Connecting
+Once Machinekit is up and **linuxcncrsh** is running, you can connect to it using
+**telnet** or similar:
+[source, bash]
+----
+telnet HOST PORT
+----
+HOST is the hostname or IP address of the computer running **linuxcncrsh** +
+PORT is the port it's listening on (5007 if you did not give **linuxcncrsh** the __--port__ option).
+
+
+== Network protocol
+**linuxcncrsh** accepts TCP connections on the port specified by the --port option,
+or 5007 if not specified.
+
+The client sends requests, and the **linuxcncrsh** server returns replies.
+Requests consist of a command word followed by optional command-specific
+parameters.  Requests and most request parameters are case
+insensitive. The exceptions are passwords, file paths and text strings.
+
+Requests to **linuxcncrsh** are terminated with line endings, any combination of
+one or more `\r` and `\n` characters.  Replies from **linuxcncrsh** are terminated
+with the sequence `\r\n`.
+
+=== The supported commands are as follows:
+
+**hello** __<password> <client> <version>__
+
+__<password>__ must match **linuxcncrsh**'s connect password, or "EMC" if no
+**--connectpw** was supplied.  +
+The three arguments may not contain whitespace.
+
+If a valid password was entered the server will respond with: +
+__HELLO ACK <ServerName> <ServerVersion>__
+
+If an invalid password or any other syntax error occurs then the server responds with: +
+__HELLO NAK__
+
+**get** __<subcommand> [<parameters>]__
+
+The get command takes one of the Machinekit sub-commands (described in the
+section **Machinekit Subcommands**, below) and zero or more additional
+subcommand-specific parameters.
+
+**set** __<subcommand> <parameters>__
+
+The set command takes one of the Machinekit sub-commands (described in the
+section **Machinekit Subcommands**, below) and one or more additional
+parameters.
+
+**quit** 
+
+The quit command disconnects the associated socket connection.
+
+**shutdown**
+
+The shutdown command tells Machinekit to shutdown and disconnect the
+session. This command may only be issued if the Hello has been
+successfully negotiated and the connection has control of the CNC (see
+**enable** subcommand in the **Machinekit Subcommands** section, below).
+
+**help**
+
+The help command will return help information in text format over the
+connection. If no parameters are specified, it will itemize the available
+commands.  If a command is specified, it will provide usage information
+for the specified command. Help will respond regardless of whether a
+"Hello" has been successsfully negotiated.
+
+
+== Machinekit Subcommands
+Subcommands for **get** and **set** are:
+
+**echo** __{on|off}__
+
+With get, any on/off parameter is ignored and the current echo state is
+returned.  With set, sets the echo state as specified.  Echo defaults to
+on when the connection is first established.  When echo is on, all commands
+will be echoed upon receipt.  This state is local to each connection.
+
+**verbose** __{on|off}__
+
+With get, any on/off parameter is ignored and the current verbose state
+is returned.  With set, sets the verbose state as specified.  When verbose
+mode is on, all set commands return positive acknowledgement in the form
+SET <COMMAND> ACK, and text error messages will be issued (FIXME: I don't
+know what this means).  The verbose state is local to each connection,
+and starts out OFF on new connections.
+
+**enable** __{<passwd>|off}__
+
+The session's enable state indicates whether the current connection is
+enabled to perform control functions.  With get, any parameter is ignored,
+and the current enable state is returned.  With set and a valid password
+matching **linuxcncrsh**'s --enablepw (EMCTOO if not specified), the current
+connection is enabled for control functions.  "OFF" may not be used as
+a password and disables control functions for this connection.
+
+**config** __[TBD]__
+
+Unused, ignore for now.
+
+**comm_mode** __{ascii|binary}__
+
+With get, any parameter is ignored and the current communications
+mode is returned.  With set, will set the communications mode to the
+specified mode.  The ascii mode is the text request/reply mode, the
+binary protocol is not currently designed or implemented.
+
+**comm_prot** __<version>__
+S
+With get, any parameter is ignored and the current protocol version
+used by the server is returned.  With set, sets the server to use the
+specified protocol version, provided it is lower than or equal to the
+highest version number supported by the server implementation.
+
+**inifile**
+
+Not currently implemented!  With get, returns the string "emc.ini".
+Should return the full path and file name of the current configuration
+inifile.  Setting this does nothing.
+
+**plat**
+
+With get, returns the string "Linux".
+
+**ini** __<var> <section>__
+
+Not currently implemented, do not use!  Should return the string value
+of <var> in section <section> of the ini file.
+
+**debug** __<value>__
+
+With get, any parameter is ignored and the current integer value of
+EMC_DEBUG is returned.  Note that the value of EMC_DEBUG returned is
+the from the UI's ini file, which may be different than emc's ini file.
+With set, sends a command to the EMC to set the new debug level, and
+sets the EMC_DEBUG global here to the same value. This will make the
+two values the same, since they really ought to be the same.
+
+**set_wait** __{none|received|done}__
+
+The set_wait setting controls the wait after receiving a command.
+It can be "none" (return right away), "received" (after the command was
+sent and received), or "done" (after the command was done).  With get,
+any parameter is ignored and the current set_wait setting is returned.
+With set, set the set_wait setting to the specified value.
+
+**wait** __{received|done}__
+
+With set, force a wait for the previous command to be received, or
+done. This lets you wait in the event that "set_wait none" is in effect.
+
+**set_timeout** __<timeout>__
+
+With set, set the timeout for commands to return to <timeout>
+seconds. Timeout is a real number. If it's <= 0.0, it means wait forever.
+Default is 0.0, wait forever.
+
+**update** __{none|auto}_
+
+The update mode controls whether to return fresh or stale values for
+"get" requests.  When the update mode is "none" it returns stale values,
+when it's "auto" it returns fresh values.  Defaults to "auto" for new
+connections.  Set this to "none" if you like to be confused.
+
+**error**
+
+With get, returns the current error string, or "ok" if no error.
+
+**operator_display**
+
+With get, returns the current operator display string, or "ok" if none.
+
+**operator_text**
+
+With get, returns the current operator text string, or "ok" if none.
+
+**time**
+
+With get, returns the time, in seconds, from the start of the epoch. This
+starting time depends on the platform.
+
+**estop** __{on|off}__
+
+With get, ignores any parameters and returns the current estop setting
+as "on" or "off".  With set, sets the estop as specified.  Estop "on"
+means the machine is in the estop state and won't run.
+
+**machine** __{on|off}__
+
+With get, ignores any parameters and returns the current machine power
+setting as "on" or "off".  With set, sets the machine on or off as
+specified.
+
+**mode** __{manual|auto|mdi}__
+
+With get, ignores any parameters and returns the current machine mode.
+With set, sets the machine mode as specified.
+
+**mist** __{on|off}__
+
+With get, ignores any parameters and returns the current mist coolant
+setting.  With set, sets the mist setting as specified.
+
+**flood** __{on|off}__
+
+With get, ignores any parameters and returns the current flood coolant
+setting.  With set, sets the flood setting as specified.
+
+**lube** __{on|off}__
+
+With get, ignores any parameters and returns the current lube pump
+setting.  With set, sets the lube pump setting as specified.
+
+**lube_level**
+
+With get, returns the lubricant level sensor reading as "ok" or "low".
+With set, mocks you for wishful thinking.
+
+**spindle** __{forward|reverse|increase|decrease|constant|off}__
+
+With get, any parameter is ignored and the current spindle state is
+returned as "forward", "reverse", "increase", "decrease", or "off". With
+set, sets the spindle as specified.  Note that "increase" and "decrease"
+will cause a speed change in the corresponding direction until a
+"constant" command is sent.
+
+**brake** __{on|off}__
+
+With get, any parameter is ignored and the current brake setting is
+returned.  With set, the brake is set as specified.
+
+**tool**
+
+With get, returns the id of the currently loaded tool.
+
+**tool_offset**
+
+With get, returns the currently applied tool length offset.
+
+**load_tool_table** __<file>__
+
+With set, loads the tool table specified by <file>.
+
+**home** __{0|1|2|...}__
+
+With set, homes the indicated axis.
+
+**jog_stop** __{0|1|2|...}__
+
+With set, stop any in-progress jog on the specified axis.
+
+**jog**  __{0|1|2|...} <speed>__
+
+With set, jog the specified axis at <speed>; sign of speed is direction.
+
+
+**jog_incr** __{0|1|2|...} <speed> <incr>__
+
+With set, jog the indicated axis by increment <incr> at the <speed>; sign of
+speed is direction.
+
+**feed_override <percent>**
+
+With get, any parameter is ignored and the current feed override is
+returns (as a percentage of commanded feed).  With set, sets the feed
+override as specified.
+
+**spindle_override** __<percent>__
+
+With get, any parameter is ignored and the current spindle override
+is returnd (as a percentage of commanded speed).  With set, sets the
+spindle override as specified.
+
+**abs_cmd_pos** __[{0|1|...}]__
+
+With get, returns the specified axis' commanded position in absolute
+coordinates.  If no axis is specified, returns all axes' commanded
+absolute position.
+
+**abs_act_pos** __[{0|1|...}]__
+
+With get, returns the specified axis' actual position in absolute
+coordinates.  If no axis is specified, returns all axes' actual absolute
+position.
+
+**rel_cmd_pos** __[{0|1|...}]__
+
+With get, returns the specified axis' commanded position in relative
+coordinates, including tool length offset.  If no axis is specified,
+returns all axes' commanded relative position.
+
+
+**rel_act_pos** __[{0|1|...}]__
+
+With get, returns the specified axis' actual position in relative
+coordinates, including tool length offset.  If no axis is specified,
+returns all axes' actual relative position.
+
+
+**joint_pos** __[{0|1|...}]__
+
+With get, returns the specified joint's actual position in absolute
+coordinates, excluding tool length offset.  If no joint is specified,
+returns all joints' actual absolute position.
+
+
+**pos_offset** __[{X|Y|Z|R|P|W}]__
+
+With get, returns the position offset associated with the world coordinate
+provided.
+
+
+**joint_limit** __[{0|1|...}]__
+
+With get, returns limit status of the specified joint as "ok", "minsoft",
+"minhard", "maxsoft", or "maxhard".  If no joint number is specified,
+returns the limit status of all joints.
+
+
+**joint_fault** __[{0|1|...}]__
+
+With get, returns the fault status of the specified joint as "ok" or
+"fault".  If no joint number is specified, returns the fault status of
+all joints.
+
+
+**joint_homed** __[{0|1|...}]__
+
+With get, returns the homed status of the specified joint as "homed"
+or "not".  If no joint number is specified, returns the homed status of
+all joints.
+
+
+**mdi** __<string>__
+
+With set, sends <string> as an MDI command.
+
+
+**task_plan_init**
+
+With set, initializes the program interpreter.
+
+
+**open** __<filename>__
+
+With set, opens the named file.  The <filename> is opened by linuxcnc,
+so it should either be an absolute path or a relative path starting in
+the linuxcnc working directory (the directory of the active .ini file).
+Note that linuxcnc can only have one file open at a time, and it's up to
+the UI (**linuxcncrsh** or similar) to close any open file before opening a
+new file.  **linuxcncrsh** currently does not support closing files, which
+rather limits the utility of this command.
+
+
+**run** __[<StartLine>]__
+
+With set, runs the opened program.  If no StartLine is specified, runs
+from the beginning.  If a StartLine is specified, start line, runs from
+that line. A start line of -1 runs in verify mode.
+
+
+**pause**
+
+With set, pause program execution.
+
+
+**resume**
+
+With set, resume program execution.
+
+
+**abort**
+
+With set, abort program or MDI execution.
+
+
+**step**
+
+With set, step the program one line.
+
+
+**program**
+
+With get, returns the name of the currently opened program, or "none".
+
+
+**program_line**
+
+With get, returns the currently executing line of the program.
+
+
+**program_status**
+
+With get, returns "idle", "running", or "paused".
+
+
+**program_codes**
+
+With get, returns the string for the currently active program codes.
+
+
+**joint_type** __[<joint>]__
+
+With get, returns "linear", "angular", or "custom" for the type of the
+specified joint (or for all joints if none is specified).
+
+
+**joint_units** __[<joint>]__
+
+With get, returns "inch", "mm", "cm", or "deg", "rad", "grad", or
+"custom", for the corresponding native units of the specified joint (or
+for all joints if none is specified).  The type of the axis (linear or
+angular) is used to resolve which type of units are returned. The units
+are obtained heuristically, based on the EMC_AXIS_STAT::units numerical
+value of user units per mm or deg.  For linear joints, something close
+to 0.03937 is deemed "inch", 1.000 is "mm", 0.1 is "cm", otherwise it's
+"custom".  For angular joints, something close to 1.000 is deemed "deg",
+PI/180 is "rad", 100/90 is "grad", otherwise it's "custom".
+
+
+**program_units**
+
+Synonym for program_linear_units.
+
+
+**program_linear_units**
+
+With get, returns "inch", "mm", "cm", or "none", for the corresponding
+linear units that are active in the program interpreter.
+
+
+**program_angular_units**
+
+With get, returns "deg", "rad", "grad", or "none" for the corresponding
+angular units that are active in the program interpreter.
+
+
+**user_linear_units**
+
+With get, returns "inch", "mm", "cm", or "custom", for the corresponding
+native user linear units of the Machinekit trajectory level. This is obtained
+heuristically, based on the EMC_TRAJ_STAT::linearUnits numerical value
+of user units per mm.  Something close to 0.03937 is deemed "inch",
+1.000 is "mm", 0.1 is "cm", otherwise it's "custom".
+
+
+**user_angular_units**
+
+Returns "deg", "rad", "grad", or "custom" for the corresponding native
+user angular units of the Machinekit trajectory level. Like with linear units,
+this is obtained heuristically.
+
+
+**display_linear_units**
+
+With get, returns "inch", "mm", "cm", or "custom", for the linear
+units that are active in the display.  This is effectively the value
+of linearUnitConversion.
+
+**display_angular_units**
+
+With get, returns "deg", "rad", "grad", or "custom", for the angular
+units that are active in the display.  This is effectively the value
+of angularUnitConversion.
+
+
+**linear_unit_conversion** __{inch|mm|cm|auto}__
+
+With get, any parameter is ignored and the active unit conversion is
+returned.  With set, sets the unit to be displayed.  If it's "auto",
+the units to be displayed match the program units.
+
+
+**angular_unit_conversion** __{deg|rad|grad|auto}__
+
+With get, any parameter is ignored and the active unit conversion is
+returned.  With set, sets the units to be displayed. If it's "auto",
+the units to be displayed match the program units.
+
+
+**probe_clear**
+
+With set, clear the probe tripped flag.
+
+
+**probe_tripped**
+
+With get, return the probe state - has the probe tripped since the last clear?
+
+
+**probe_value**
+
+With get, return the current value of the probe signal.
+
+
+**probe**
+
+With set, move toward a certain location. If the probe is tripped on
+the way stop motion, record the position and raise the probe tripped flag.
+
+
+**teleop_enable** __[on|off]__
+
+With get, any parameter is ignored and the current teleop mode is
+returned.  With set, sets the teleop mode as specified.
+
+
+**kinematics_type**
+
+With get, returns the type of kinematics functions used (identity=1,
+serial=2, parallel=3, custom=4).
+
+
+**override_limits** __{on|off}__
+
+With get, any parameter is ignored and the override_limits setting is
+returned.  With set, the override_limits parameter is set as specified.
+If override_limits is on, disables end of travel hardware limits to
+allow jogging off of a limit. If parameters is off, then hardware limits
+are enabled.
+
+
+**optional_stop** __{0|1}__
+
+With get, any parameter is ignored and the current "optional stop on M1"
+setting is returned.  With set, the setting is set as specified.
+
+
+
+== Example Session
+
+This section shows an example session.  Bold items are typed by you,
+non-bold is machine output.
+
+The user connects to **linuxcncrsh**, handshakes with the server (hello), +
+enablesmachine commanding from this session (set enable), +
+brings the machineout of estop (set estop off) and turns it on (set machine on), +
+homes all the axes, +
+switches the machine to mdi mode, +
+sends an MDI g-code command,
+then disconnects and shuts down Machinekit.
+
+$ **telnet localhost 5007** +
+Trying 127.0.0.1... +
+Connected to 127.0.0.1 +
+Escape character is '^]'. +
+**hello EMC user-typing-at-telnet 1.0** +
+HELLO ACK EMCNETSVR 1.1 +
+**set enable EMCTOO** +
+set enable EMCTOO +
+**set mode manual** +
+set mode manual +
+**set estop off** +
+set estop off +
+**set machine on** +
+set machine on +
+**set home 0** +
+set home 0 +
+**set home 1** +
+set home 1 +
+**set home 2** +
+set home 2 +
+**set mode mdi** +
+set mode mdi +
+**set mdi g0x1** +
+set mdi g0x1 +
+**shutdown** +
+shutdown +
+Connection closed by foreign host.

@@ -1,0 +1,12 @@
+---
+---
+
+:skip-front-matter:
+= Updating Machinekit
+
+To update Machinekit from packages, simply try to install the previously installed packages again.
+
+If newer versions exist they will be downloaded, if not you will be advised that the existing package is 
+the latest available.
+
+

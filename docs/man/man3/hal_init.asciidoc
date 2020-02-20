@@ -1,0 +1,48 @@
+---
+---
+:skip-front-matter:
+
+= hal_init
+:manmanual: HAL Components
+:mansource: ../man/man3/hal_init.asciidoc
+:man version : 
+
+
+== NAME
+
+**hal_init** -- initialize a component
+
+
+
+== SYNTAX
+**int hal_init** ( **const char** *__compname__ )
+
+
+
+== ARGUMENTS
+__modname__ +
+The name of this hal component
+
+
+
+== DESCRIPTION
+
+**hal_init** creates a HAL component.
+
+__compname__ a string that identifies the component. +
+The string may be no longer than **RTAPI_NAME_LEN**
+characters.  +
+If __compname__ is **NULL**, the system will assign a
+name.
+
+
+
+== REALTIME CONSIDERATIONS
+Call only from within user or init/cleanup code, not from realtime tasks.
+
+
+
+== RETURN VALUE
+On success, returns a positive integer module ID, which is
+used for subsequent calls to hal and rtapi APIs. +
+On failure, returns a HAL error code.

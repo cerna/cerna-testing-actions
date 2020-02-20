@@ -1,0 +1,63 @@
+---
+---
+
+:skip-front-matter:
+:source-highlighter: pygments
+
+= About Machinekit
+
+== The Software
+
+* Machinekit (the Enhanced Machine Control) is a software system for computer
+  control of machine tools such as milling machines and lathes, robots
+  such as puma and scara and other computer controlled machines up to 9 axes.
+* Machinekit is free software with open source code. Current versions of Machinekit
+  are entirely licensed under the GNU General Public License and Lesser
+  GNU General Public License (GPL and LGPL)
+* Machinekit provides:
+** a graphical user interface (actually several interfaces to choose from)
+** an interpreter for 'G-code' (the RS-274 machine tool programming language)
+** a realtime motion planning system with look-ahead
+** operation of low-level machine electronics such as sensors and motor drives
+** an easy to use 'breadboard' layer for quickly creating a unique 
+   configuration for your machine
+** a software PLC programmable with ladder diagrams
+** easy installation with a Live-CD
+* It does not provide drawing (CAD - Computer Aided Design) or G-code
+  generation from the drawing (CAM - Computer Automated Manufacturing)
+  functions.
+* It can simultaneously move up to 9 axes and supports a variety of
+  interfaces.
+* The control can operate true servos (analog or PWM) with the feedback
+  loop closed by the Machinekit software at the computer, or open loop with
+  step-servos or stepper motors.
+* Motion control features include: cutter radius and length
+  compensation, path deviation limited to a specified tolerance, lathe
+  threading, synchronized axis motion, adaptive feedrate, operator feed
+  override, and constant velocity control.
+* Support for non-Cartesian motion systems is provided via custom
+  kinematics modules. Available architectures include hexapods (Stewart
+  platforms and similar concepts) and systems with rotary joints to
+  provide motion such as PUMA or SCARA robots.
+* Machinekit runs on Linux using real time extensions. 
+
+== The Operating System
+
+Debian has been chosen because it fits perfectly into the Open Source
+views of Machinekit:
+
+ - Debian will always be free of charge, and there is no extra fee for
+   the 'enterprise edition', we make our very best work available to
+   everyone on the same Free terms.
+ - Debian uses the very best in translations and accessibility
+   infrastructure that the Free Software community has to offer, to make
+   Debian usable for as many people as possible.
+ - The Debian community is entirely committed to the principles of free
+   software development; we encourage people to use open source software,
+   improve it and pass it on.
+   
+== Getting Machinekit
+
+See link:../../getting-started/getting-started-platform[Setting up machinekit on a platform]
+
+

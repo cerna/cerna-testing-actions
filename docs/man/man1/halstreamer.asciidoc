@@ -1,0 +1,107 @@
+---
+---
+:skip-front-matter:
+
+= HALSTREAMER
+:manmanual: HAL Components
+:mansource: ../man/man1/halstreamer.asciidoc
+:man version : 
+
+
+== NAME
+**halstreamer** -- stream file data into HAL in real time
+
+
+== SYNOPSIS
+**halstreamer** __[ options ]__
+
+
+
+== DESCRIPTION
+**streamer** and **halstreamer** are used together to stream data from a file into the HAL in real time.
+
+**streamer** is a realtime HAL component that exports HAL pins and creates a FIFO in shared memory. +
+hal_streamer is a user space program that copies data from stdin into the FIFO, so that **streamer** can write it to the HAL pins.
+
+
+== OPTIONS
+
+**-c** __CHAN__ +
+instructs **halstreamer** to write to FIFO __CHAN__.
+
+FIFOs are numbered from zero, and the default value is zero, so
+this option is not needed unless multiple FIFOs have been created.
+
+**-N** __NAME__ +
+sets an explicit HAL component name.
+
+__FILENAME__ +
+instructs **halsampler** to read from **FILENAME** instead of from stdin.
+
+
+== USAGE
+A FIFO must first be created by loading **streamer** with +
+**halcmd loadrt** +
+or a +
+**loadrt** command in a .hal file.  
+
+Then **halstreamer** can be invoked to begin writing data into the FIFO.
+
+Data is read from stdin, and is almost always either redirected from a file
+or piped from some other program, since keyboard input would be unable to keep
+up with even slow streaming rates.
+
+Each line of input must match the pins that are attached to the FIFO, for example, if the
+**streamer** config string was "ffbs" then each line of input must consist of two floats, a bit, and a signed integer, in that
+order and separated by whitespace.  
+
+Floats must be formatted as required by strtod ,signed and unsigned integers must be formated as required by strtol / strtoul, 
+and bits must be either '0' or '1'.
+
+**halstreamer** transfers data to the FIFO as fast as possible until the FIFO is full, then it retries at regular intervals, until it is either killed or reads 
+EOF from stdin. +
+Data can be redirected from a file or piped from some other program.
+
+The FIFO size should be chosen to ride through any momentary disruptions in the flow of data, such as disk seeks.  If the FIFO is big enough,
+**halstreamer** can be restarted with the same or a new file before the FIFO empties, resulting in a continuous stream of data.
+
+The data format for **halstreamer** input is the same as for **halsampler** output, so 'waveforms' captured with **halsampler**
+can be replayed using **halstreamer**.
+
+
+== EXIT STATUS
+If a problem is encountered during initialization, **halstreamer** prints a message to stderr and returns failure.
+
+If a badly formatted line is encountered while writing to the FIFO, it prints a message to stderr, skips the line, and continues (this behavior may be revised in the future).
+
+Upon reading EOF from the input, it returns success.  If it is terminated before the input ends, it returns failure.
+
+
+
+== SEE ALSO
+**sampler**     -  http://www.machinekit.io/docs/man/man9/sampler/ +
+**streamer**    -  http://www.machinekit.io/docs/man/man9/streamer +
+**halsampler**  -  http://www.machinekit.io/docs/man/man1/halsampler +
+
+== HISTORY
+
+
+
+== BUGS
+
+
+
+== AUTHOR
+Original version by John Kasunich, as part of the LinuxCNC
+project.  Improvements by several other members of
+the LinuxCNC development team.
+
+
+== REPORTING BUGS
+Report bugs to the Machinekit forum +
+https://groups.google.com/forum/#!forum/machinekit
+
+== COPYRIGHT
+Copyright (c) 2006 John Kasunich.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.

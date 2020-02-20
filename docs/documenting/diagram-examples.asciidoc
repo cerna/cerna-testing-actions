@@ -1,0 +1,569 @@
+---
+layout: docs
+---
+:imagesoutdir: docs/documenting/diagram-examples
+
+
+:toc:
+
+:toclevels: 3
+
+== How to create embedded diagrams for this website
+
+Besides inserting your locally created images, the
+link:https://github.com/mhaberler/docker-jekyll-asciidoctor/tree/master/jekyll-asciidoctor-base[formatting engine]
+used for the machinekit website supports a variety of embedded diagram types:
+Diagrams can be created by embedded markup and will be rendered to images in the website automatically.
+
+See the link:https://github.com/asciidoctor/asciidoctor-diagram[Asciidoctor Diagram manual] for details.
+
+
+
+=== ditaa - DIagrams Through Ascii Art
+
+See the link:http://ditaa.sourceforge.net/[ditaa website] for details.
+
+[ditaa, "ditaa-test"]
+----
+                   +-------------+
+                   | asciidoctor |-------+
+                   |  diagram    |       |
+                   +-------------+       | png out
+                       ^                 |
+                       | ditaa in        |
+                       |                 v
+ +--------+   +--------+----+    /---------------\
+ |        | --+ asciidoctor +--> |               |
+ |  Text  |   +-------------+    |Beatiful output|
+ |Document|   |   !magic!   |    |               |
+ |     {d}|   |             |    |               |
+ +---+----+   +-------------+    \---------------/
+     :                                   ^
+     |          Lots of work             |
+     +-----------------------------------+
+----
+
+=== shaape -  Ascii drawings
+
+See the link:https://github.com/christiangoltz/shaape[shaape manual].
+
+[shaape, "shaape-example5", "svg", width=80%]
+----
+      ^  ^  b  a   v           |        in>---+-----+-----> out1
+      |  |  |  |   |           +              |     |
+   >--[--[--|--|---|          /|\             |     *----->'out 2'
+      |  |  |  |   |lower    +'c'+            |
+      +--+--(--(---|         |   |            |    +------>'3'
+            |  |   |        'd' 'e'           |   /
+            |  +---~--->                      +--+-------->'v'    
+            |      |                 
+            +------~--->
+                   |
+                   v
+                                                              
+ +-->->->->-+        +---------------------------------------+                                                         
+ |          |        | +------------+ stacked +------------+ |                 
+ ^ arrowbox v        | | inner1     |         | inner2     | |                 
+ |          | +--+   | | +-------++ +--**     | +--------+ | |                  
+ ^          v |  |   | | |inner3  | |    **-->+ |inner4  | | |                  
+ |          | *  |   | | |        | |         | |        | | |                  
+ +--<-<-<-<-+ *  *   | | |        +-------------+        | | |                 
+              *  *   | | +--------+ |         | +--------+ | | 
+        +--***   *   | +------------+         +------------+ |                         
+        | flat   *   +---------------------------------------+              
+        +----****                                                                      
+   /\               *********               +-----+     +-----+       
+  /  \    +------+ + top     +   ********   |     |\    +--+--+                                
+ /flat\  /      /  |*********|  * shape3 *  |     +-+   +--+--+                     
+ \    / /shape1/   | shape2  |  *        *  |overlap|                                       
+  \  / +------+    +         +   ********   +-------+                    
+   \/               *********                                       
+options:
+- ".*": {fill:[[0.6, 0.8, 0.8], flat], frame:[[0.2, 0.5, 0.4, 1], solid, 2], text:[[0.1, 0.3, 0.2]]}
+- "_line_": {fill:[[0.1, 0.1, 0.1], solid, 2]}
+- "(flat)|(top)": {fill:[[0.1, 0.1, 0.1, 1], no-shadow, flat], frame:[[0.3, 0.8, 0], dotted, 3], text:[[0.9, 0.9, 0.9]]}
+- "arrowbox": {fill:[[0.7, 0.7, 0, 0.5], no-shadow, flat], frame:[[0.3, 0.8, 0], dashed, 3], text:[[0, 0, 0]]}
+- "shape[0-9]": {fill:[[0.2, 0.2, 0.2], gradient], frame:[[0.1, 0.5, 0], dotted, 3]}
+- "stacked": {fill:[[0.15, 0.3, 0.3], flat], text:[[0, 0, 0]]}
+- "inner[34]": {frame:[[0, 0, 0], 1, dotted], text:[[0, 0, 0]]}
+- "inner[12]": {fill:[[0.3, 0.6, 0.6], flat], frame:[[0, 0, 0], dashed, 1], text:[[0, 0, 0,]]}
+- "a": {fill:[[0.5, 0.0, 0.0, 0.5], 4]}
+- "b": {fill:[[0.5, 0.0, 0.5, 0.5], 4]}
+- "lower": {fill:[[0.0, 0.5, 0.0, 0.5], 4]}
+- "_arrow_": {fill:[[0.5, 0.0, 0.0, 1], flat]}
+----
+
+
+=== Graphviz - Graph Visualization Software
+
+See the link:http://www.graphviz.org/content/dot-language[Graphviz website].
+
+["graphviz", "graphviz_example", "svg"]
+---------------------------------------------------------------------
+digraph automata_0 {
+  size ="8.5, 11";
+  node [shape = circle];
+  0 [ style = filled, color=lightgrey ];
+  2 [ shape = doublecircle ];
+  0 -> 2 [ label = "a " ];
+  0 -> 1 [ label = "other " ];
+  1 -> 2 [ label = "a " ];
+  1 -> 1 [ label = "other " ];
+  2 -> 2 [ label = "a " ];
+  2 -> 1 [ label = "other " ];
+  "Machine: a" [ shape = plaintext ];
+}
+---------------------------------------------------------------------
+
+=== blockdiag -  block diagrams
+
+See the http://blockdiag.com/en/blockdiag[blockdiag manual].
+
+[blockdiag, "blockdiag_example", "svg", width=90%]
+----
+blockdiag {
+   A -> B -> C -> D;
+   A -> E -> F -> G;
+}
+----
+
+=== actdiag - activity diagrams
+
+See the link:http://blockdiag.com/en/actdiag/index.html[actdiag manual].
+
+[actdiag, "actdiag_example", "svg"]
+----
+actdiag {
+  write -> convert -> image
+
+  lane user {
+     label = "User"
+     write [label = "Writing reST"];
+     image [label = "Get diagram IMAGE"];
+  }
+  lane actdiag {
+     convert [label = "Convert reST to Image"];
+  }
+}
+----
+
+=== nwdiag - network diagrams
+
+See the link:http://blockdiag.com/en/nwdiag/index.html[nwdiag manual].
+
+[nwdiag, "nwdiag_example", "svg", width=90%]
+----
+nwdiag {
+  network dmz {
+      address = "210.x.x.x/24"
+
+      web01 [address = "210.x.x.1"];
+      web02 [address = "210.x.x.2"];
+  }
+  network internal {
+      address = "172.x.x.x/24";
+
+      web01 [address = "172.x.x.1"];
+      web02 [address = "172.x.x.2"];
+      db01;
+      db02;
+  }
+}
+----
+
+=== seqdiag - sequence diagrams
+
+See the link:http://blockdiag.com/en/seqdiag/index.html[seqdiag manual].
+
+[seqdiag, "seqdiag_example", "svg"]
+----
+seqdiag {
+  // normal edge and doted edge
+  A -> B [diagonal, label = "normal edge"];
+  B --> C [label = "dotted edge"];
+
+  B <-- C [label = "return dotted edge"];
+  A <- B [label = "return edge"];
+
+  // asynchronus edge
+  A ->> B [label = "asynchronus edge"];
+  B -->> C [label = "asynchronus dotted edge"];
+
+  B <<-- C [label = "return asynchronus doted edge"];
+  A <<- B [label = "return asynchronus edge"];
+
+  // self referenced edge
+  A -> A [label = "self reference edge"];
+}
+----
+
+=== mermaid - sequence diagrams and flowchars
+
+See the link:http://knsv.github.io/mermaid/[mermaid website].
+
+These come out too wide, for some reason this plugin
+does not respect the link:https://github.com/asciidoctor/asciidoctor-pdf/issues/76[width= parameter discussed here].
+
+[mermaid, "mermaid_seqdiag_example", "svg"]
+----
+%% Sequence diagram code
+sequenceDiagram
+    Alice ->> Bob: Hello Bob, how are you?
+    Bob-->>John: How about you John?
+    Bob--x Alice: I am good thanks!
+    Bob-x John: I am good thanks!
+    Note right of John: Bob thinks a long<br/>long time, so long<br/>that the text does<br/>not fit on a row.
+
+    Bob-->Alice: Checking with John...
+    Alice->John: Yes... John, how are you?
+----
+
+[mermaid, "mermaid_flowchart_example", "svg"]
+----
+graph LR
+    A[Square Rect] -- Link text --> B((Circle))
+    A --> C(Round Rect)
+    B --> D{Rhombus}
+    C --> D
+----
+
+=== PlantUML 
+
+==== PlantUML Sequence Diagrams
+
+See the PlantUML website for link:http://plantuml.com/sequence.html[more examples]
+
+[plantuml, plantuml_sequencediagram_example, png]
+----
+@startuml
+Alice -> Bob: Authentication Request
+
+alt successful case
+
+    Bob -> Alice: Authentication Accepted
+    
+else some kind of failure
+
+    Bob -> Alice: Authentication Failure
+    group My own label
+      Alice -> Log : Log attack start
+        loop 1000 times
+            Alice -> Bob: DNS Attack
+        end
+      Alice -> Log : Log attack end
+    end
+    
+else Another type of failure
+
+   Bob -> Alice: Please repeat
+   
+end
+@enduml
+----
+
+==== PlantUML Usecase Diagram
+
+See the PlantUML website for link:http://plantuml.com/usecase.html[more examples]
+
+[plantuml, plantuml_usecasediagram_example, png]
+----
+@startuml
+:Main Admin: as Admin
+(Use the application) as (Use)
+
+User -> (Start)
+User --> (Use)
+
+Admin ---> (Use)
+
+note right of Admin : This is an example.
+
+note right of (Use)
+  A note can also
+  be on several lines
+end note
+
+note "This note is connected\nto several objects." as N2
+(Start) .. N2
+N2 .. (Use)
+@enduml
+
+----
+
+==== PlantUML Class Diagram
+
+See the PlantUML website for link:http://plantuml.com/classes.html[more examples]
+
+[plantuml, plantuml_classdiagram_example, png]
+----
+@startuml
+
+abstract class AbstractList
+abstract AbstractCollection
+interface List
+interface Collection
+
+List <|-- AbstractList
+Collection <|-- AbstractCollection
+
+Collection <|- List
+AbstractCollection <|- AbstractList
+AbstractList <|-- ArrayList
+
+class ArrayList {
+  Object[] elementData
+  size()
+}
+
+enum TimeUnit {
+  DAYS
+  HOURS
+  MINUTES
+}
+
+annotation SuppressWarnings
+
+@enduml
+----
+
+==== PlantUML State Diagram
+
+See the PlantUML website for link:http://plantuml.com/state.html[more examples]
+
+[plantuml, plantuml_statediagram_example, png]
+----
+@startuml
+scale 600 width
+
+[*] -> State1
+State1 --> State2 : Succeeded
+State1 --> [*] : Aborted
+State2 --> State3 : Succeeded
+State2 --> [*] : Aborted
+state State3 {
+  state "Accumulate Enough Data\nLong State Name" as long1
+  long1 : Just a test
+  [*] --> long1
+  long1 --> long1 : New Data
+  long1 --> ProcessData : Enough Data
+}
+State3 --> State3 : Failed
+State3 --> [*] : Succeeded / Save Result
+State3 --> [*] : Aborted
+ 
+@enduml
+----
+
+==== PlantUML Activity Diagram
+
+See the PlantUML website for link:http://plantuml.com/activity2.html[more examples]
+
+[plantuml, plantuml_activitydiagram_example, png]
+----
+@startuml
+
+start
+:ClickServlet.handleRequest();
+:new page;
+if (Page.onSecurityCheck) then (true)
+  :Page.onInit();
+  if (isForward?) then (no)
+    :Process controls;
+    if (continue processing?) then (no)
+      stop
+    endif
+    
+    if (isPost?) then (yes)
+      :Page.onPost();
+    else (no)
+      :Page.onGet();
+    endif
+    :Page.onRender();
+  endif
+else (false)
+endif
+
+if (do redirect?) then (yes)
+  :redirect process;
+else
+  if (do forward?) then (yes)
+    :Forward request;
+  else (no)
+    :Render page template;
+  endif
+endif
+
+stop
+
+@enduml
+----
+
+==== PlantUML Component Diagram
+
+See the PlantUML website for link:http://plantuml.com/component.html[more examples]
+
+[plantuml, plantuml_componentdiagram_example, png]
+----
+@startuml
+
+package "Some Group" {
+  HTTP - [First Component]
+  [Another Component]
+}
+ 
+node "Other Groups" {
+  FTP - [Second Component]
+  [First Component] --> FTP
+} 
+
+cloud {
+  [Example 1]
+}
+
+
+database "MySql" {
+  folder "This is my folder" {
+    [Folder 3]
+  }
+  frame "Foo" {
+    [Frame 4]
+  }
+}
+
+
+[Another Component] --> [Example 1]
+[Example 1] --> [Folder 3]
+[Folder 3] --> [Frame 4]
+
+@enduml
+----
+
+==== PlantUML Deployment Diagram
+
+See the PlantUML website for link:http://plantuml.com/deployment.html[more examples]
+
+[plantuml, plantuml_deploymentdiagram_example1, png]
+----
+@startuml
+artifact Foo1 {
+  folder Foo2
+}
+
+folder Foo3 {
+  artifact Foo4
+}
+
+frame Foo5 {
+  database Foo6
+}
+
+@enduml
+----
+
+[plantuml, plantuml_deploymentdiagram_example2, png]
+----
+@startuml
+node Foo7 {
+ cloud Foo8 
+}
+
+cloud Foo9 {
+  frame Foo10
+}
+
+database Foo11  {
+  storage Foo12
+}
+
+storage Foo13 {
+  storage Foo14
+}
+@enduml
+----
+
+==== PlantUML Salt Diagram
+
+See the PlantUML website for link:http://plantuml.com/salt.html[more examples]
+
+[plantuml, plantuml_saltdiagram_example, png]
+----
+@startsalt
+{+
+{* File | Edit | Source | Refactor 
+ Refactor | New | Open File | - | Close | Close All }
+{/ General | Fullscreen | Behavior | Saving }
+{
+  { Open image in: | ^Smart Mode^ }
+  [X] Smooth images when zoomed
+  [X] Confirm image deletion
+  [ ] Show hidden images 
+}
+[Close]
+}
+@endsalt
+----
+
+=== wavedrom - Digital Timing Diagrams
+
+See the link:http://wavedrom.com/[wavedrom website],
+and this http://wavedrom.com/images/SNUG2016_WaveDrom.pdf[interesting article].
+
+["wavedrom","wavedrom-demo",svg]
+---------------------------------------------------------------------
+{ signal: [
+  {    name: 'clk',   wave: 'p..Pp..P'},
+  ['Master',
+    ['ctrl',
+      {name: 'write', wave: '01.0....'},
+      {name: 'read',  wave: '0...1..0'}
+    ],
+    {  name: 'addr',  wave: 'x3.x4..x', data: 'A1 A2'},
+    {  name: 'wdata', wave: 'x3.x....', data: 'D1'   },
+  ],
+  {},
+  ['Slave',
+    ['ctrl',
+      {name: 'ack',   wave: 'x01x0.1x'},
+    ],
+    {  name: 'rdata', wave: 'x.....4x', data: 'Q2'},
+  ]
+]}
+---------------------------------------------------------------------
+
+
+=== https://developers.google.com/chart/[Google Charts]
+
+can be embedded in a http://asciidoctor.org/docs/user-manual/#pass-bl[passthrough block].
+Example from https://google-developers.appspot.com/chart/interactive/docs/gallery/candlestickchart#example[here].
+++++
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+  function drawChart() {
+    var data = google.visualization.arrayToDataTable([
+      ['Mon', 20, 28, 38, 45],
+      ['Tue', 31, 38, 55, 66],
+      ['Wed', 50, 55, 77, 80],
+      ['Thu', 77, 77, 66, 50],
+      ['Fri', 68, 66, 22, 15]
+      // Treat first row as data as well.
+    ], true);
+
+    var options = {
+      legend:'none'
+    };
+
+    var chart = new google.visualization.CandlestickChart(document.getElementById('chart_div'));
+
+    chart.draw(data, options);
+  }
+    </script>
+  </head>
+  <body>
+    <div id="chart_div" style="width: 600px; height: 350px;"></div>
+  </body>
+</html>
+++++

@@ -1,0 +1,26 @@
+---
+---
+
+:skip-front-matter:
+
+= Getting Started
+
+:leveloffset: +1
+
+link:../getting-started/getting-started-platform[Setting up machinekit on a platform]
+
+link:../common/System_Requirements[System Requirements]
+
+link:../quickstart/stepper_quickstart[Stepper Quickstart]
+
+link:../config/stepconf[Stepper Configuration Wizard]
+
+link:../config/pncconf[Mesa Configuration Wizard]
+
+link:../config/copy_and_run[Running Machinekit]
+
+link:../common/Linux_FAQ[Linux FAQ]
+
+link:../common/GPLD_Copyright[GPLD Copyright]
+
+:leveloffset: -1

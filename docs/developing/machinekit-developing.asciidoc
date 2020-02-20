@@ -1,0 +1,180 @@
+---
+---
+
+:skip-front-matter:
+
+== [[packages-developing]]Setting up for development
+
+. <<install-development-packages,Install packages required for building from source>>
+. <<get-source-and-build,Get and build the source>>
+
+== [[install-development-packages]]Install packages required for building from source
+
+These instructions assume you have a pristine Debian installation, and you
+have made sure you have `sudo` rights. Do not build Machinekit as root.
+
+If you have previously installed the machinekit runtime packages, make sure
+you have completely removed all of the runtime packages before you continue.
+To do so, execute `sudo apt-get remove --purge machinekit` .
+
+Note that a previous LinuxCNC package install will conflict with building from source,
+so make sure LinuxCNC packages are removed by `sudo apt-get remove --purge linuxcnc` .
+
+First, install supporting packages - note you *must* have configured the deb.machinekit.io 
+apt repository already or the wrong package versions will be installed - see the instructions
+link:/docs/getting-started/installing-packages#configure-apt[here] to do so.
+
+[source,bash]
+----
+sudo apt-get install libczmq-dev python-zmq libjansson-dev pkg-config \
+  libwebsockets-dev libxenomai-dev python-pyftpdlib cython bwidget lsb-release
+----
+
+If you are on Debian Wheezy then you need to add wheezy-backports in the
+package archive for cython 0.19:
+[source,bash]
+----
+sudo sh -c \
+  "echo 'deb http://ftp.us.debian.org/debian wheezy-backports main' > \
+  /etc/apt/sources.list.d/wheezy-backports.list"
+sudo apt-get update
+sudo apt-get install -t wheezy-backports cython
+----
+
+== [[get-source-and-build]]Get and build the source
+
+[source,bash]
+----
+sudo apt-get install git dpkg-dev
+sudo apt-get install --no-install-recommends devscripts equivs
+git clone https://github.com/machinekit/machinekit.git
+cd machinekit
+# to add RT-PREEMPT support, add a 'r'
+# to add Xenomai support, add an 'x'
+# this builds for Posix, RT-PREEMPT, Xenomai:
+debian/configure -prx 
+sudo mk-build-deps -ir
+cd src
+./autogen.sh
+# for the Beaglebone, add --with-platform-beaglebone to ./configure
+# for the Raspberry2, add --with-platform-raspberry to ./configure
+# for PC platforms, add --with-rt-preempt  --with-posix  --with-xenomai
+./configure  
+make
+sudo make setuid
+
+# this script checks for missing configuration files
+# and will give hints how to remedy:
+../scripts/check-system-configuration.sh
+----
+
+If you wish to run this installation by default, add the next lines to your `~/.bashrc` file,
+so that every new terminal is set up correctly for running Machinekit.
+
+[source,bash]
+----
+echo 'if [ -f ~/machinekit/scripts/rip-environment ]; then
+    source ~/machinekit/scripts/rip-environment
+    echo "Environment set up for running Machinekit"
+fi' >> ~/.bashrc
+----
+
+However, if you are installing a RIP build onto a system that already has a version of Machinekit installed as a binary
+install from packages say, or has other RIP builds, you should invoke from the root dir of the RIP,
+[source,bash]
+----
+. ./scripts/rip-environment
+----
+only in terminal sessions where you specifically want to run this RIP.
+
+Users who wish to invoke machinekit (built with xenomai threads enabled) on a xenomai realtime kernel must ensure they are members of the xenomai group. If that wasn't already done when installing the kernel, then add each such user now
+
+[source,bash]
+----
+sudo adduser <username> xenomai
+----
+
+Logout and login again therafter.
+
+=== A Note on machinekit.ini and the MKUUID
+
+Since inception, /etc/linuxcnc/machinekit.ini has contained a hard coded UUID under the 'MKUUID=' field
+
+This despite the text above it stating that all machines should have a unique MKUUID to enable the
+zeroconf browsing for particular instances to work.
+
+This has now actually caused problems, with some users exploring the networked communications aspect
+of machinekit, as perhaps it was originally envisaged.
+
+So, from 16th Jan 2019 onwards, there are a couple of wrinkles to be aware of, if you actually intend using the MKUUID for anything.
+
+**RIP builds**
+
+A fresh clone will generate a new UUID when built.
+If you want to use a particular UUID, keep it in a separate system file called /etc/linuxcnc/mkuuid [1] and manually edit RIP/etc/linuxcnc/machinekit.ini to use it.
+When you rebuild the machinekit.ini UUID will be preserved, however be aware doing a complete ' git clean -xdf && ./autogen.sh && ./configure' will wipe it.
+
+([1] For RIPs, this file is just a suggested failsafe storage option for now, it will actually be used by package installs)
+
+**Package installs**
+
+A package install onto a blank system will generate a new UUID.
+
+If you are updating and do not purge your configs:
+
+- If the package finds an /etc/linuxcnc/mkuuid file [1], it will use the MKUUID within if valid, over any other option.
+
+- If machinekit.ini exists with a valid UUID, it will use that.  Otherwise it will update with the generated UUID.
+
+- If machinekit.ini is missing even though the previous package was not purged, it will generate one with a valid UUID.
+
+
+For the vast majority of users, this change will have no impact, their configs just use whatever UUID is in machinekit.ini, if at all, without consequence.
+
+
+== Additional runtime packages you may need
+
+=== Documentation
+
+Documentation has been almost completely split from the machinekit build.
+
+Drivers and components built with comp or instcomp, can still be configured to provide
+documentation for those items only using
+[source, bash]
+----
+./configure --enable-build-documentation
+----
+when building machinekit.
+
+The complete documentation is available as below, so this option is only really of interest
+to developers writing components who wish to check the generated manual page for it.
+
+This package will provide local copies of the manual pages and a man page stub to remind
+of how to use them.
+
+[source,bash]
+----
+sudo apt-get install machinekit-manual-pages
+----
+
+It is an optional install for users who wish to use a stand alone system or who have limited
+internet connectivity.
+
+The same pages can be accessed here: +
+http://www.machinekit.io/docs/man/man1/  For information on utilities and GUIs +
+http://www.machinekit.io/docs/man/man3/  For information on the hal and rtapi APIs +
+http://www.machinekit.io/docs/man/man9/  For information on components and drivers +
+
+=== Additional runtime packages
+
+The above steps outline only the build requirements. There might be some 
+runtime support packages missing if machinekit was never installed before.
+
+The easiest way to fetch all the machinekit runtime packages is to install
+a current package, and then delete it - the process pulls in all current
+runtime prerequisites:
+[source,bash]
+----
+sudo apt-get install machinekit
+sudo apt-get remove --purge machinekit
+----

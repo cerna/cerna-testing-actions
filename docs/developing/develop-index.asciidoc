@@ -1,0 +1,28 @@
+---
+---
+
+:skip-front-matter:
+
+= Various developing links
+
+- link:/docs/developing/developing[General links inc. setting up the environment]
+
+- link:/docs/developing/machinekit-developing[Specific building from source stuff]
+
+- link:/docs/developing/rtfaults[How to debug rt faults]
+
+- link:/docs/developing/building-rt-preempt-kernel[Building your own rt-preempt kernel]
+
+- link:/docs/developing/rt-kernel-config[The actual kernel config to use as a start for rt-preempt kernel]
+
+- link:/docs/hal/threads-and-latency[Advanced threads management with cgroups to optimise latency]
+
+- link:/docs/developing/writing-components[General info and links re writing components]
+
+- link:/docs/hal/instcomp_writing_a_component[Tutorial on writing an instantiated component with instcomp]
+
+- link:/docs/developing/toolchangers[Specific info on writing toolchanger components]
+
+- link:/docs/developing/CAN-developing[Information on developing using CAN]
+
+- link:/docs/developing/qtquickvcp[Installing Using and Developing for QtQuickVcp]
