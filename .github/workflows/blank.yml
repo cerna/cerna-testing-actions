@@ -1,4 +1,4 @@
-name: CI
+name: Basic action
 
 on: [push]
 
