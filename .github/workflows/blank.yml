@@ -17,6 +17,7 @@ jobs:
     - name: Checkou second GITHUB pages repository
       uses: actions/checkout@v2
       with:
+        repository: machinekit/machinekit.github.io
         fetch-depth: '1'
         path: second
 
