@@ -33,5 +33,6 @@ jobs:
         ls main
         echo ---
         ls second
+        cd main
         git log --oneline --max-count 10
 
