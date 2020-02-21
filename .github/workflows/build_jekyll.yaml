@@ -15,7 +15,7 @@ jobs:
         path: main-cat
 
     - name: Run a Jekyll builder
-      run: docker run -it -v $(pwd)/main-cat:/work haberlerm/docker-jekyll-asciidoctor jekyll build --verbose --trace --config _config.yml,_config_devel.yml
+      run: docker run -v $(pwd)/main-cat:/work haberlerm/docker-jekyll-asciidoctor jekyll build --verbose --trace --config _config.yml,_config_devel.yml
 
     - name: Run a multi-line script
       run: |
