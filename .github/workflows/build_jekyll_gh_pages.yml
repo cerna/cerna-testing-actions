@@ -32,6 +32,11 @@ jobs:
       run: |
         echo VYPIS obsah vytvorene slozky
         ls -R main-cat/_site
+        echo Target delete
+        rm -dr target/
+        echo TARGET
+        ls -R target
+        echo target copy
         cp -r main-cat/_site/* target/
         echo +++++++
         ls -R target
