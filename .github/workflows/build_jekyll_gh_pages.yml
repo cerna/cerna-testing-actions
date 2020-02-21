@@ -24,6 +24,11 @@ jobs:
         ref: gh-pages
         fetch-depth: '1'
         path: target
+    
+    - name : GITHUB CONTEXT
+      env: 
+        GITHUB_CONTEXT: ${{ toJson(github) }} 
+      run: echo "$GITHUB_CONTEXT"
 
     # Running the commands in ubuntu-master and not in Docker container because
     # of the age of the container -> It cannot be even build anymore
@@ -57,11 +62,12 @@ jobs:
         echo TARGET
         ls -R target
         echo KONEC
+  
     
     - name: Create commit
       run: |
         cd target
-        git config --local user.email ${GITHUB_ACTOR}@github.com
+        git config --local user.email ${{ github.event.pull_request.head.sha }}
         git config --local user.name ${GITHUB_ACTOR}
         git add --all
         git commit -m "PULL request ID ${{ github.event.pull_request.id }}, URL ${{ github.event.pull_request.url }}, SHA ${{ github.event.pull_request.head.sha }} "
