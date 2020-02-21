@@ -1,4 +1,4 @@
-name: Jekyll_build_action_pull_on_mk-docs
+name: Jekyll build_action_pull_on_mk-docs
 
 on:
   pull_request:
