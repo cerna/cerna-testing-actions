@@ -3,7 +3,7 @@ name: Jekyll_build_action
 on:
   pull_request:
     branches:
-      - master
+      - mk-docs
 
 jobs:
   build:
@@ -42,6 +42,3 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         path: target
-    
-    - name: OK to fail
-      run: echo It is OK to fail
