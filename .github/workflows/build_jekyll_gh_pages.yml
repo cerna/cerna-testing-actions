@@ -33,7 +33,7 @@ jobs:
         echo VYPIS obsah vytvorene slozky
         ls -R main-cat/_site
         echo Target delete
-        rm -dr target/
+        rm -rf target/{*,.*}
         echo TARGET
         ls -R target
         echo target copy
