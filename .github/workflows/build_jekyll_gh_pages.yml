@@ -25,30 +25,46 @@ jobs:
         fetch-depth: '1'
         path: target
 
+    # Running the commands in ubuntu-master and not in Docker container because
+    # of the age of the container -> It cannot be even build anymore
     - name: Run a Jekyll builder
       run: docker run -v $(pwd)/main-cat:/work haberlerm/docker-jekyll-asciidoctor jekyll build --verbose --trace --config _config.yml,_config_devel.yml
 
-    - name: Run a multi-line script
+    - name: VYPIS obsah vytvorene slozky
       run: |
         echo VYPIS obsah vytvorene slozky
         ls -R main-cat/_site
+
+    - name: Target delete
+      run: |
         echo Target delete
-        rm -rf target/{*,.*}
+        cd target
+        find . -depth -not \( -path "./.git" -or -path "." -or -path "./.git/*" \) -print0 | xargs -0 -t -I '{}' rm  -d '{}'
+        cd ..
+
+    - name: TARGET vypis
+      run: |  
         echo TARGET
         ls -R target
+
+    - name: target copy
+      run: | 
         echo target copy
         cp -r main-cat/_site/* target/
-        echo +++++++
+
+    - name: TARGET vypis 2
+      run: |  
+        echo TARGET
         ls -R target
         echo KONEC
     
     - name: Create commit
       run: |
         cd target
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
+        git config --local user.email ${GITHUB_ACTOR}@github.com
+        git config --local user.name ${GITHUB_ACTOR}
         git add --all
-        git commit -m "Dodelat"
+        git commit -m "PULL request ID ${{ github.event.pull_request.id }}, URL ${{ github.event.pull_request.url }}, SHA ${{ github.event.pull_request.head.sha }} "
         cd ..
 
     - name: Where am I
