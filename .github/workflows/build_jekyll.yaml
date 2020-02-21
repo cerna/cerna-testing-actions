@@ -1,0 +1,23 @@
+name: Jekyll_build_action
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout main CAT repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: '0'
+        path: main-cat
+
+    - name: Run a Jekyll builder
+      run: docker run -it -v $(pwd)/main-cat:/work haberlerm/docker-jekyll-asciidoctor jekyll build --verbose --trace --config _config.yml,_config_devel.yml
+
+    - name: Run a multi-line script
+      run: |
+        echo VYPIS obsah vytvorene slozky
+        ls main-cat/_site
