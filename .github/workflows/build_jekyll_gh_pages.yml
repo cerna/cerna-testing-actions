@@ -17,10 +17,10 @@ jobs:
         fetch-depth: '1'
         path: main-cat
 
-    - name: Checkout target repository
+    - name: Checkout CAT repository, gh_pages branch
       uses: actions/checkout@v2
       with:
-        repository: cerna/cerna.github.io
+        ref: gh_pages
         fetch-depth: '1'
         path: target
 
@@ -35,10 +35,17 @@ jobs:
         echo +++++++
         ls -R target
         echo KONEC
+    
+    - name: Create commit
+      run: |
+        cd target
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add --all
+        git commit -m "Dodelat"
 
-    - name: Create Pull Request
-      id: cpr
-      uses: peter-evans/create-pull-request@v2
+    - name: Push changes to gh_pages
+      uses: ad-m/github-push-action@master
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        path: target
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: gh_pages
