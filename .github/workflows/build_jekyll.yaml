@@ -28,7 +28,7 @@ jobs:
       run: |
         echo VYPIS obsah vytvorene slozky
         ls -R main-cat/_site
-        cp -r main-cat/_site target
+        cp -r main-cat/_site/* target/
         echo +++++++
         ls -R target
         echo KONEC
@@ -37,5 +37,5 @@ jobs:
       id: cpr
       uses: peter-evans/create-pull-request@v2
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.CERNA_TOKEN }}
         path: target
