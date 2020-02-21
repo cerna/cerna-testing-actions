@@ -31,6 +31,7 @@ jobs:
         cp -r main-cat/_site target
         echo +++++++
         ls -R target
+        echo KONEC
 
     - name: Create Pull Request
       id: cpr
