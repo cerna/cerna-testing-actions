@@ -14,7 +14,8 @@ jobs:
     - name: Checkout main CAT repository
       uses: actions/checkout@v2
       with:
-        fetch-depth: '1'
+        ref: ${{ github.event.pull_request.head.sha }}
+        fetch-depth: '10'
         path: main-cat
 
     - name: Checkout CAT repository, gh-pages branch
