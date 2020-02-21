@@ -37,5 +37,8 @@ jobs:
       id: cpr
       uses: peter-evans/create-pull-request@v2
       with:
-        token: ${{ secrets.CERNA_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         path: target
+    
+    - name: OK to fail
+      run: echo It is OK to fail
