@@ -45,7 +45,7 @@ jobs:
     - name: VYPIS obsah vytvorene slozky
       run: |
         echo VYPIS obsah vytvorene slozky
-        tree -a main-cat/_site
+        ls -R main-cat/_site -print1
 
     - name: Target delete
       run: |
