@@ -59,4 +59,5 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.CERNA_TOKEN }}
       working-directory: ./target
+      
     
