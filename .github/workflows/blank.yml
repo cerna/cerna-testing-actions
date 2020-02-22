@@ -1,6 +1,9 @@
 name: Basic action
 
-on: [push]
+on: 
+  push:
+    branches-ignore:
+      - '**'
 
 jobs:
   build:
