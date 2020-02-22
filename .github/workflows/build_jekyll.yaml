@@ -53,6 +53,7 @@ jobs:
     - name: hub example
       shell: bash
       run: |
+        curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s 2.14.1
         bin/hub version
         hub push 
       env:
