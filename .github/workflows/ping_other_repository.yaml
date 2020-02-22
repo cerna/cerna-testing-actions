@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     # This simple to is used for inter-repository signaling
-    #
     steps:
     - name: Signal other repository by the message
       uses: peter-evans/repository-dispatch@v1
