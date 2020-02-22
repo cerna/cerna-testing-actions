@@ -7,88 +7,86 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    #
-    - name: Checkout main CAT repository
-      uses: actions/checkout@v2
-      with:
-        ref: ${{ github.event.pull_request.head.sha }}
-        fetch-depth: '10'
-        path: main-cat
+      #
+      - name: Checkout main CAT repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: "10"
+          path: main-cat
 
-    - name: Checkout CAT repository, gh-pages branch
-      uses: actions/checkout@v2
-      with:
-        ref: gh-pages
-        fetch-depth: '1'
-        path: target
-    
-    - name : GITHUB CONTEXT
-      env: 
-        GITHUB_CONTEXT: ${{ toJson(github) }} 
-      run: echo "$GITHUB_CONTEXT"
-    
-    - name: Get last commit author
-      run: |
-        cd main-cat
-        echo ::set-env name=authormail::$(git log --format='%ae' -n 1 ${{ github.event.after }})
-        echo ::set-env name=authorname::$(git log --format='%an' -n 1 ${{ github.event.after }})
-        cd ..
+      - name: Checkout CAT repository, gh-pages branch
+        uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+          fetch-depth: "1"
+          path: target
 
-    # Running the commands in ubuntu-master and not in Docker container because
-    # of the age of the container -> It cannot be even build anymore
-    - name: Run a Jekyll builder
-      run: docker run -v $(pwd)/main-cat:/work haberlerm/docker-jekyll-asciidoctor jekyll build --verbose --trace --config _config.yml,_config_devel.yml
+      - name: GITHUB CONTEXT
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
 
-    - name: VYPIS obsah vytvorene slozky
-      run: |
-        echo VYPIS obsah vytvorene slozky
-        ls -R main-cat/_site -print1
+      - name: Get last commit author
+        run: |
+          cd main-cat
+          echo ::set-env name=authormail::$(git log --format='%ae' -n 1 ${{ github.event.after }})
+          echo ::set-env name=authorname::$(git log --format='%an' -n 1 ${{ github.event.after }})
+          cd ..
 
-    - name: Target delete
-      run: |
-        echo Target delete
-        cd target
-        find . -depth -not \( -path "./.git" -or -path "." -or -path "./.git/*" \) -print0 | xargs -0 -t -I '{}' rm  -d '{}'
-        cd ..
+      # Running the commands in ubuntu-master and not in Docker container because
+      # of the age of the container -> It cannot be even build anymore
+      - name: Run a Jekyll builder
+        run: docker run -v $(pwd)/main-cat:/work haberlerm/docker-jekyll-asciidoctor jekyll build --verbose --trace --config _config.yml,_config_devel.yml
 
-    - name: TARGET vypis
-      run: |  
-        echo TARGET
-        ls -R target
+      - name: VYPIS obsah vytvorene slozky
+        run: |
+          echo VYPIS obsah vytvorene slozky
+          ls -R main-cat/_site -print1
 
-    - name: target copy
-      run: | 
-        echo target copy
-        cp -r main-cat/_site/* target/
+      - name: Target delete
+        run: |
+          echo Target delete
+          cd target
+          find . -depth -not \( -path "./.git" -or -path "." -or -path "./.git/*" \) -print0 | xargs -0 -t -I '{}' rm  -d '{}'
+          cd ..
 
-    - name: TARGET vypis 2
-      run: |  
-        echo TARGET
-        ls -R target
-        echo KONEC
-  
-    
-    - name: Create commit
-      run: |
-        cd target
-        git config --local user.email "$authormail"
-        echo Author's mail for the commit set to $authormail
-        git config --local user.name "$authorname"
-        echo Author's name for the commit set to $authorname
-        git add --all
-        git commit -m "PULL request ID ${{ github.event.pull_request.id }}, URL ${{ github.event.pull_request.url }}, SHA ${{ github.event.pull_request.head.sha }} "
-        cd ..
+      - name: TARGET vypis
+        run: |
+          echo TARGET
+          ls -R target
 
-    - name: Where am I
-      run: pwd
+      - name: target copy
+        run: |
+          echo target copy
+          cp -r main-cat/_site/* target/
 
-    - name: Push changes to gh-pages
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        directory: target
-        branch: gh-pages
+      - name: TARGET vypis 2
+        run: |
+          echo TARGET
+          ls -R target
+          echo KONEC
+
+      - name: Create commit
+        run: |
+          cd target
+          git config --local user.email "$authormail"
+          git config --local user.name "$authorname"
+          echo Author's name for the commit set to $authorname
+          echo Author's mail for the commit set to $authormail
+          git add --all
+          git commit -m "PULL request ID ${{ github.event.pull_request.id }}, URL ${{ github.event.pull_request.url }}, SHA ${{ github.event.pull_request.head.sha }} "
+          cd ..
+
+      - name: Where am I
+        run: pwd
+
+      - name: Push changes to gh-pages
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          directory: target
+          branch: gh-pages
