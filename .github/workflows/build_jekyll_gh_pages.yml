@@ -1,4 +1,4 @@
-name: Jekyll build action on pull on mk-docs
+name: Rebuild on pull request on master
 
 on:
   pull_request:
@@ -6,23 +6,34 @@ on:
       - mk-docs
 
 jobs:
-  build:
+  buildMachinekitSite:
     runs-on: ubuntu-latest
 
     steps:
-      #
-      - name: Checkout main CAT repository
+      # Locally clone the repository which we want to build with depth of 5 commits
+      - name: Checkout the pull request for Machinekit-docs
         uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-          path: main-cat
+          path: to_build
+          fetch-depth: '5'
 
-      - name: Checkout CAT repository, gh-pages branch
+      - name: Git SHA on which the build is requested
+        run: echo ${{ github.event.pull_request.head.sha }}
+
+      # Locally clone the repository to which the build results will be pushed
+      - name: Checkout this repository, gh-pages branch
         uses: actions/checkout@v2
         with:
           ref: gh-pages
           path: target
 
+      - name: Git log of repository on which the build is requested
+        run: git log
+        working-directory: ./to_build
+
+      # The commits pushed to gh-pages branch will appear as originated from the author
+      # of the changes
       - name: Get last commit author
         run: |
           echo "###########################################################"
@@ -31,7 +42,7 @@ jobs:
           git log -n 1
           echo ::set-env name=authormail::$(git log --format='%ae' -n 1 ${{ github.event.after }})
           echo ::set-env name=authorname::$(git log --format='%an' -n 1 ${{ github.event.after }})
-        working-directory: ./main-cat
+        working-directory: ./to_build
 
       - name: Set up credentials for the new commit
         run: |
@@ -44,19 +55,21 @@ jobs:
       # Running the commands in ubuntu-master and not in Docker container because
       # of the age of the container -> It cannot be even build anymore
       - name: Run a Jekyll builder
-        run: docker run -v $(pwd)/main-cat:/work haberlerm/docker-jekyll-asciidoctor jekyll build --verbose --trace --config _config.yml,_config_devel.yml
+        run: docker run -v $(pwd)/to_build:/work haberlerm/docker-jekyll-asciidoctor jekyll build --verbose --trace --config _config.yml,_config_devel.yml
 
       - name: Print newly created files
         run: ls -R _site -print1
-        working-directory: ./main-cat
+        working-directory: ./to_build
 
+      # Always delete old files in the repository (for example for the case when commits
+      # remove some files), but keep the .git directory and files in it intact
+      # In other words, don't kill itself
       - name: Delete all files from ./target
         run: find . -depth -not \( -path "./.git" -or -path "." -or -path "./.git/*" \) -print0 | xargs -0 -t -I '{}' rm  -d '{}'
         working-directory: ./target
 
-
       - name: Copy the newly generated site to ./target
-        run: cp -r main-cat/_site/* target/
+        run: cp -r to_build/_site/* target/
 
       - name: Create commit
         run: |
@@ -64,6 +77,8 @@ jobs:
           git commit -m "PULL request ID ${{ github.event.pull_request.id }}, URL ${{ github.event.pull_request.url }}, SHA ${{ github.event.pull_request.head.sha }} "
         working-directory: ./target
 
+      # In the case of multiple running builders at the same time, always fetch and rebase
+      # gh-pages branch right before commit to minimize chances of failure
       - name: Rebase ./target repository as a last thing before Push
         run: |
           git fetch origin gh-pages
