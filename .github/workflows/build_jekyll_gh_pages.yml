@@ -2,8 +2,8 @@ name: Rebuild on pull request on master
 
 on:
   pull_request:
-    branches-ignore:
-      - '***'
+    branches:
+      - mk-docs
 
 jobs:
   buildMachinekitSite:
@@ -33,6 +33,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: gh-pages
+          token: ${{ secrets.CERNA_TOKEN }}
           path: target
 
       - name: Git log of repository on which the build is requested
@@ -95,5 +96,5 @@ jobs:
       - name: Push changes to gh-pages
         run: |
           echo "PUSHING..."
-          git push origin gh-pages
+          git push
         working-directory: ./target
