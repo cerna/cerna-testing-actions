@@ -93,9 +93,6 @@ jobs:
         working-directory: ./target
 
       - name: Push changes to gh-pages
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.CERNA_TOKEN }}
-          repository: 'cerna/cerna-testing-actions'
-          directory: target
-          branch: gh-pages
+        run: |
+          echo "PUSHING..."
+          git push https://cerna:${{ secrets.GITHUB_TOKEN }}@github.com/cerna/cerna/cerna-testing-actions.git HEAD:gh-pages
