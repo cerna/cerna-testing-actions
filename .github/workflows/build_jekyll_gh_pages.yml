@@ -32,6 +32,7 @@ jobs:
       - name: Checkout this repository, gh-pages branch
         uses: actions/checkout@v2
         with:
+          repository: 'cerna/cerna-testing-actions'
           ref: gh-pages
           token: ${{ secrets.CERNA_TOKEN }}
           path: target
