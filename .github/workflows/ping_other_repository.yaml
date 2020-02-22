@@ -17,4 +17,4 @@ jobs:
         token: ${{ secrets.CERNA_TOKEN }}
         repository: cerna/cerna.github.io
         event-type: rebuild-site-now
-        client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}, "authorization": "lanovka"}'
+        client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "authorization": "lanovka"}'
