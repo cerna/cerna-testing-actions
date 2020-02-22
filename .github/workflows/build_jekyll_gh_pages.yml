@@ -15,14 +15,12 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: "10"
           path: main-cat
 
       - name: Checkout CAT repository, gh-pages branch
         uses: actions/checkout@v2
         with:
           ref: gh-pages
-          fetch-depth: "1"
           path: target
 
       - name: GITHUB CONTEXT
@@ -32,10 +30,9 @@ jobs:
 
       - name: Get last commit author
         run: |
-          cd main-cat
           echo ::set-env name=authormail::$(git log --format='%ae' -n 1 ${{ github.event.after }})
           echo ::set-env name=authorname::$(git log --format='%an' -n 1 ${{ github.event.after }})
-          cd ..
+        working-directory: ./main-cat
 
       # Running the commands in ubuntu-master and not in Docker container because
       # of the age of the container -> It cannot be even build anymore
@@ -50,9 +47,8 @@ jobs:
       - name: Target delete
         run: |
           echo Target delete
-          cd target
           find . -depth -not \( -path "./.git" -or -path "." -or -path "./.git/*" \) -print0 | xargs -0 -t -I '{}' rm  -d '{}'
-          cd ..
+        working-directory: ./target
 
       - name: TARGET vypis
         run: |
@@ -72,24 +68,22 @@ jobs:
 
       - name: Create commit
         run: |
-          cd target
           git config --local user.email "$authormail"
           git config --local user.name "$authorname"
           echo "Author's name for the commit set to $authorname"
           echo "Author's mail for the commit set to $authormail"
           git add --all
           git commit -m "PULL request ID ${{ github.event.pull_request.id }}, URL ${{ github.event.pull_request.url }}, SHA ${{ github.event.pull_request.head.sha }} "
-          cd ..
+        working-directory: ./target
 
       - name: Where am I
         run: pwd
 
       - name: Rebase repository as a last thing before Push
         run: |
-          cd target
           git fetch origin gh-pages
           git rebase origin/gh-pages
-          cd ..
+        working-directory: ./target
 
       - name: Push changes to gh-pages
         uses: ad-m/github-push-action@master
