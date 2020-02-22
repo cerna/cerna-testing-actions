@@ -30,6 +30,7 @@ jobs:
       with:
         repository: cerna/cerna.github.io
         fetch-depth: '1'
+        token: ${{ secrets.CERNA_TOKEN }}
         path: target
 
     - name: Run a multi-line script
@@ -53,11 +54,7 @@ jobs:
     - name: hub example
       shell: bash
       run: |
-        curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s 2.14.1
-        bin/hub version
-        bin/hub push 
-      env:
-        GITHUB_TOKEN: ${{ secrets.CERNA_TOKEN }}
+        git push origin gh-pages
       working-directory: ./target
-      
+
     
