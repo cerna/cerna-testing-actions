@@ -55,7 +55,7 @@ jobs:
       run: |
         curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s 2.14.1
         bin/hub version
-        hub push 
+        bin/hub push 
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       working-directory: ./target
