@@ -20,6 +20,13 @@ jobs:
 
       - name: Git SHA on which the build is requested
         run: echo ${{ github.event.pull_request.head.sha }}
+      
+      - name: Some DEBUG info
+        run: |
+          echo "g actor: $GITHUB_ACTOR"
+          echo "g repository: $GITHUB_REPOSITORY"
+          echo "g repository: $GITHUB_REPOSITORY"
+          echo "g repository: $GITHUB_REPOSITORY"
 
       # Locally clone the repository to which the build results will be pushed
       - name: Checkout this repository, gh-pages branch
