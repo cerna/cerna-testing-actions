@@ -2,8 +2,8 @@ name: Jekyll_build_action_push_on_master
 
 on:
   push:
-    branches-ignore:
-      - '**'
+    branches:
+      - mk-docs
 
 jobs:
   build:
@@ -11,6 +11,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Install hub
+      run: brew install hub
+    - name: Test hub
+      run: hub version
+
     - name: Checkout main CAT repository
       uses: actions/checkout@v2
       with:

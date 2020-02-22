@@ -2,8 +2,8 @@ name: Rebuild on pull request on master
 
 on:
   pull_request:
-    branches:
-      - mk-docs
+    branches-ignore:
+      - '***'
 
 jobs:
   buildMachinekitSite:
