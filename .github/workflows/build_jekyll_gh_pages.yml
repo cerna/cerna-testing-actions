@@ -96,3 +96,4 @@ jobs:
         run: |
           echo "PUSHING..."
           git push https://cerna:${{ secrets.GITHUB_TOKEN }}@github.com/cerna/cerna/cerna-testing-actions.git HEAD:gh-pages
+        working-directory: ./target
