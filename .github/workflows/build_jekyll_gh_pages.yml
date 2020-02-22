@@ -23,63 +23,48 @@ jobs:
           ref: gh-pages
           path: target
 
-      - name: GITHUB CONTEXT
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
       - name: Get last commit author
         run: |
+          echo "###########################################################"
+          echo "# Commit which will be used for mining of the credentials #"
+          echo "###########################################################"
+          git log -n 1
           echo ::set-env name=authormail::$(git log --format='%ae' -n 1 ${{ github.event.after }})
           echo ::set-env name=authorname::$(git log --format='%an' -n 1 ${{ github.event.after }})
         working-directory: ./main-cat
+
+      - name: Set up credentials for the new commit
+        run: |
+          git config --local user.email "$authormail"
+          git config --local user.name "$authorname"
+          echo "Author's name for the commit set to $authorname"
+          echo "Author's mail for the commit set to $authormail"
+        working-directory: ./target
 
       # Running the commands in ubuntu-master and not in Docker container because
       # of the age of the container -> It cannot be even build anymore
       - name: Run a Jekyll builder
         run: docker run -v $(pwd)/main-cat:/work haberlerm/docker-jekyll-asciidoctor jekyll build --verbose --trace --config _config.yml,_config_devel.yml
 
-      - name: VYPIS obsah vytvorene slozky
-        run: |
-          echo VYPIS obsah vytvorene slozky
-          ls -R main-cat/_site -print1
+      - name: Print newly created files
+        run: ls -R _site -print1
+        working-directory: ./main-cat
 
-      - name: Target delete
-        run: |
-          echo Target delete
-          find . -depth -not \( -path "./.git" -or -path "." -or -path "./.git/*" \) -print0 | xargs -0 -t -I '{}' rm  -d '{}'
+      - name: Delete all files from ./target
+        run: find . -depth -not \( -path "./.git" -or -path "." -or -path "./.git/*" \) -print0 | xargs -0 -t -I '{}' rm  -d '{}'
         working-directory: ./target
 
-      - name: TARGET vypis
-        run: |
-          echo TARGET
-          ls -R target
 
-      - name: target copy
-        run: |
-          echo target copy
-          cp -r main-cat/_site/* target/
-
-      - name: TARGET vypis 2
-        run: |
-          echo TARGET
-          ls -R target
-          echo KONEC
+      - name: Copy the newly generated site to ./target
+        run: cp -r main-cat/_site/* target/
 
       - name: Create commit
         run: |
-          git config --local user.email "$authormail"
-          git config --local user.name "$authorname"
-          echo "Author's name for the commit set to $authorname"
-          echo "Author's mail for the commit set to $authormail"
           git add --all
           git commit -m "PULL request ID ${{ github.event.pull_request.id }}, URL ${{ github.event.pull_request.url }}, SHA ${{ github.event.pull_request.head.sha }} "
         working-directory: ./target
 
-      - name: Where am I
-        run: pwd
-
-      - name: Rebase repository as a last thing before Push
+      - name: Rebase ./target repository as a last thing before Push
         run: |
           git fetch origin gh-pages
           git rebase origin/gh-pages
