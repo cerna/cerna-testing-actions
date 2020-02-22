@@ -29,6 +29,11 @@ jobs:
       env: 
         GITHUB_CONTEXT: ${{ toJson(github) }} 
       run: echo "$GITHUB_CONTEXT"
+    
+    - name: Get last commit author
+      run: |
+        echo ::set-env name=authormail::$(git log --format='%ae' -n 1 ${{ github.event.after }})
+        echo ::set-env name=authorname::$(git log --format='%an' -n 1 ${{ github.event.after }})
 
     # Running the commands in ubuntu-master and not in Docker container because
     # of the age of the container -> It cannot be even build anymore
@@ -67,8 +72,8 @@ jobs:
     - name: Create commit
       run: |
         cd target
-        git config --local user.email ${{ github.event.pull_request.head.sha }}
-        git config --local user.name ${GITHUB_ACTOR}
+        git config --local user.email $authormail
+        git config --local user.name $authorname
         git add --all
         git commit -m "PULL request ID ${{ github.event.pull_request.id }}, URL ${{ github.event.pull_request.url }}, SHA ${{ github.event.pull_request.head.sha }} "
         cd ..
