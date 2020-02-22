@@ -11,10 +11,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Install hub
-      run: brew install hub
-    - name: Test hub
-      run: hub version
+    - name: hub example
+      shell: bash
+      run: |
+        curl -fsSL https://github.com/github/hub/raw/master/script/get | bash -s 2.14.1
+        bin/hub pr list  # list pull requests in the current repo
+        bin/hub version
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Checkout main CAT repository
       uses: actions/checkout@v2
@@ -29,24 +33,30 @@ jobs:
         fetch-depth: '1'
         path: target
 
-    - name: Run a Jekyll builder
-      run: docker run -v $(pwd)/main-cat:/work haberlerm/docker-jekyll-asciidoctor jekyll build --verbose --trace --config _config.yml,_config_devel.yml
-
     - name: Run a multi-line script
       run: |
         echo VYPIS obsah vytvorene slozky
         ls -R main-cat/_site
-        cp -r main-cat/_site/* target/
+        touch ./target/${{ github.sha }}.txt
         echo +++++++
         ls -R target
         echo KONEC
+      
+    - name: Create commit
+      run: |
+        git config --local user.email "neco@neco.pl"
+        git config --local user.name "Jan Novotný"
+        git status
+        git add --all
+        git commit -m "Message x"
+      working-directory: ./target
 
-    - name: Create Pull Request
-      id: cpr
-      uses: peter-evans/create-pull-request@v2
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        path: target
+    - name: hub example
+      shell: bash
+      run: |
+        bin/hub version
+        hub push 
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      working-directory: ./target
     
-    - name: OK to fail
-      run: echo It is OK to fail
