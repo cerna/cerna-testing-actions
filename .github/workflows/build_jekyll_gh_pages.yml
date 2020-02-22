@@ -84,6 +84,13 @@ jobs:
       - name: Where am I
         run: pwd
 
+      - name: Rebase repository as a last thing before Push
+        run: |
+          cd target
+          git fetch origin gh-pages
+          git rebase origin/gh-pages
+          cd ..
+
       - name: Push changes to gh-pages
         uses: ad-m/github-push-action@master
         with:
