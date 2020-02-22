@@ -54,7 +54,7 @@ jobs:
     - name: hub example
       shell: bash
       run: |
-        git push origin gh-pages
+        git push
       working-directory: ./target
 
     
