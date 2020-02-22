@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # This simple to is used for inter-repository signaling
-    
+
     steps:
     - name: Signal other repository by the message
       uses: peter-evans/repository-dispatch@v1
@@ -19,4 +19,4 @@ jobs:
         token: ${{ secrets.CERNA_TOKEN }}
         repository: cerna/cerna.github.io
         event-type: rebuild-site-now
-        client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "authorization": "lanovka"}'
+        client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "authorization": "${{ secrets.KEYCODE }}"}'
