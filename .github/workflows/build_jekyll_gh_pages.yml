@@ -95,5 +95,5 @@ jobs:
       - name: Push changes to gh-pages
         run: |
           echo "PUSHING..."
-          git push https://cerna:${{ secrets.GITHUB_TOKEN }}@github.com/cerna/cerna-testing-actions.git HEAD:gh-pages
+          git push origin gh-pages
         working-directory: ./target
