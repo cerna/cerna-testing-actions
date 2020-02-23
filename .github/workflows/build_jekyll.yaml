@@ -30,7 +30,7 @@ jobs:
       with:
         repository: cerna/cerna.github.io
         fetch-depth: '1'
-        token: ${{ secrets.CERNA_TOKEN }}
+        token: ${{ secrets.MACHINEKITBOT_TOKEN }}
         path: target
 
     - name: Run a multi-line script
@@ -51,7 +51,7 @@ jobs:
         git commit -m "Message x"
       working-directory: ./target
 
-    - name: hub example
+    - name: push example
       shell: bash
       run: |
         git push

@@ -16,8 +16,7 @@ jobs:
     - name: Signal other repository by the message
       uses: peter-evans/repository-dispatch@v1
       with:
-        token: ${{ secrets.CERNA_TOKEN }}
-        repository: cerna/cerna-testing-actions
+        token: ${{ secrets.MACHINEKITBOT_TOKEN }}
         event-type: test-ping
         client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
       env:
