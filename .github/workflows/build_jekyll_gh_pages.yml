@@ -87,11 +87,11 @@ jobs:
 
       # In the case of multiple running builders at the same time, always fetch and rebase
       # gh-pages branch right before commit to minimize chances of failure
-      - name: Rebase ./target repository as a last thing before Push
-        run: |
-          git fetch origin gh-pages
-          git rebase origin/gh-pages
-        working-directory: ./target
+      #- name: Rebase ./target repository as a last thing before Push
+      #  run: |
+      #    git fetch origin gh-pages
+      #    git rebase origin/gh-pages
+      #  working-directory: ./target
 
       - name: Push to Github
         uses: x-actions/gh-pages@release/v1
