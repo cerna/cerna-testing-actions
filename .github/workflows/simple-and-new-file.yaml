@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - mk-docs
+  pull_request:
+    branches:
+      - mk-docs
 
 jobs:  
   test_idiocy:
@@ -22,7 +25,8 @@ jobs:
           ls -a build 
           touch ./build/file-${{ github.sha }}.txt 
           ls -a build
-          ls -a 
+          ls -a
+          echo $(pwd) 
         
       - name: Install SSH Client
         uses: webfactory/ssh-agent@v0.2.0 # This step installs the ssh client into the workflow run. There's many options available for this on the action marketplace.
