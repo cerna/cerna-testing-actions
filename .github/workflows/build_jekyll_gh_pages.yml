@@ -33,7 +33,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: 'cerna/cerna-testing-actions'
-          token: ${{ secrets.MACHINEKITBOT_TOKEN }}
           ref: gh-pages
           path: target
 
