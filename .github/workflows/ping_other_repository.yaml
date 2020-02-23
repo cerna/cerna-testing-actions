@@ -2,8 +2,8 @@ name: Ping other repository on push
 
 on:
   push:
-    branches:
-      - mk-docs
+    branches-ignore:
+      - '***'
 
 jobs:
   build:
