@@ -79,7 +79,7 @@ jobs:
       - name: Copy the newly generated site to ./target
         run: cp -r to_build/_site/* target/
 
-      - #name: Create commit
+      #- name: Create commit
         #run: |
         #  git add --all
         #  git commit -m "PULL request ID ${{ github.event.pull_request.id }}, URL ${{ github.event.pull_request.url }}, SHA ${{ github.event.pull_request.head.sha }} "
