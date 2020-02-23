@@ -104,20 +104,20 @@ jobs:
           PUBLISH_DIR: ./target
           DEPLOY_PRIVATE_KEY: ${{ secrets.MKB_DEPLOY_KEY }}
 
-      - name: Neco
-        run: |
-          mkdir neco
-          cd ./neco  
-          git clone "https://${{ secrets.MACHINEKITBOT_TOKEN }}@github.com/cerna/cerna-testing-actions.git" --branch gh-pages info
-          cd info
-          touch ${{ github.sha }}.txt
-          git config --local user.name "JA"
-          git config --local user.email "ja@ja.cz"
-          git add --all
-          git commit -m "1"
-          cd ..
-          rm -dr info
-          cd ..
+      #- name: Neco
+      #  run: |
+      #    mkdir neco
+      #    cd ./neco  
+      #    git clone "https://${{ secrets.MACHINEKITBOT_TOKEN }}@github.com/cerna/cerna-testing-actions.git" --branch gh-pages info
+      #    cd info
+      #    touch ${{ github.sha }}.txt
+      #    git config --local user.name "JA"
+      #    git config --local user.email "ja@ja.cz"
+      #    git add --all
+      #    git commit -m "1"
+      #    cd ..
+      #    rm -dr info
+      #    cd ..
           
         
 

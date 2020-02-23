@@ -3,7 +3,7 @@ name: Jekyll_build_action_push_on_master
 on:
   push:
     branches-ignore:
-      - '***'
+      - '**'
 
 jobs:
   build:

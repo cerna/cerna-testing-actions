@@ -3,7 +3,7 @@ name: Ping other repository on push
 on:
   push:
     branches-ignore:
-      - '***'
+      - '**'
 
 jobs:
   build:
