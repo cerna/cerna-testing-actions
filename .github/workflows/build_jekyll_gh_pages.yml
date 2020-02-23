@@ -13,8 +13,7 @@ jobs:
       - name: Install SSH Client
         uses: webfactory/ssh-agent@v0.2.0
         with:
-          ssh-private-key: ${{ secrets.rsa_oneline }}
-      
+          ssh-private-key: ${{ secrets.rsa_oneline2 }}
 
 
       # Locally clone the repository which we want to build with depth of 5 commits
