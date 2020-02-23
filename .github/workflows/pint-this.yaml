@@ -2,8 +2,8 @@ name: Ping this
 
 on:
   pull_request:
-    branches:
-      - mk-docs
+    branches-ignore:
+      - '**'
 
 jobs:
   build:
