@@ -40,14 +40,21 @@ jobs:
           path: target
       - run: |
           git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+        working-directory: ./target
 
       - name: Git log of repository on which the build is requested
         run: | 
           git log
           git status 
+        working-directory: ./to_build
+
+        - name: Git log of repository on which the build is requested
+        run: | 
+          git log
+          git status 
           git checkout gh-pages 
           git status
-        working-directory: ./to_build
+        working-directory: ./target
 
       # The commits pushed to gh-pages branch will appear as originated from the author
       # of the changes
