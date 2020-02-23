@@ -93,17 +93,19 @@ jobs:
           git rebase origin/gh-pages
         working-directory: ./target
 
-      #- name: Push changes to gh-pages
-      #  run: |
-      #    echo "PUSHING..."
-      #    git remote add temporary https://${{ secrets.MK_TOKEN }}:${{ secrets.CERNA_TOKEN }}@github.com/cerna/cerna-testing-actions.git
-      #    git push temporary gh-pages
-      #  working-directory: ./target
-      - run: cd target
-      - name: push
-        uses: github-actions-x/commit@v2.3
-        with:
-          github-token: ${{ secrets.CERNA_TOKEN }}
-          push-branch: gh-pages
-          commit-message: ' adds auto-generated benchmarks and bar graph'
-          rebase: 'true' # pull abd rebase before commit
+      - name: Push changes to gh-pages
+        run: |
+          echo "PUSHING..."
+          git config --global user.name ${{ secrets.MK_TOKEN }}
+          git config --global user.email "jakub.fiser@eryaf.com"
+          git remote add temporary https://${{ secrets.CERNA_TOKEN }}@github.com/cerna/cerna-testing-actions.git
+          git push temporary gh-pages
+        working-directory: ./target
+      #- run: cd target
+      #- name: push
+      #  uses: github-actions-x/commit@v2.3
+      #  with:
+      #    github-token: ${{ secrets.CERNA_TOKEN }}
+      #    push-branch: gh-pages
+      #    commit-message: ' adds auto-generated benchmarks and bar graph'
+      #    rebase: 'true' # pull abd rebase before commit
