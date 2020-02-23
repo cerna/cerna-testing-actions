@@ -94,14 +94,15 @@ jobs:
       #    git rebase origin/gh-pages
       #  working-directory: ./target
 
-      #- name: Push to Github
-      #  uses: x-actions/gh-pages@release/v1
-      #  env:
-      #    GITHUB_EMAIL: "tower@iont.cz"
-      #    GITHUB_USERNAME: "cerna"
-      #    PUBLISH_REPO: https://${{ secrets.CERNA_TOKEN }}@github.com/cerna/cerna-testing-actions.git
-      #    PUBLISH_BRANCH: gh-pages
-      #    PUBLISH_DIR: ./target
+      - name: Push to Github
+        uses: x-actions/gh-pages@release/v1
+        env:
+          GITHUB_EMAIL: "tower@iont.cz"
+          GITHUB_USERNAME: "cerna"
+          PUBLISH_REPO: https://${{ secrets.CERNA_TOKEN }}@github.com/cerna/cerna-testing-actions.git
+          PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: ./target
+          DEPLOY_PRIVATE_KEY: ${{ secrets.MKB_DEPLOY_KEY }}
 
       - name: Neco
         run: |
@@ -114,7 +115,6 @@ jobs:
           git config --local user.email "ja@ja.cz"
           git add --all
           git commit -m "1"
-          git push origin gh-pages
           cd ..
           rm -dr info
           cd ..
