@@ -22,7 +22,7 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-          $ echo “${{ secrets.ukulele1 }}” | ssh-add – > /dev/null
+          echo “${{ secrets.ukulele1 }}” | ssh-add – > /dev/null
           #ssh-add - <<< "${{ secrets.ukulele1 }}"
 
 
