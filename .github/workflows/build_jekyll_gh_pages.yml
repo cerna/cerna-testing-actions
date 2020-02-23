@@ -10,19 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    #  - name: Install SSH Client
-    #    uses: webfactory/ssh-agent@v0.2.0
-    #    with:
-    #      ssh-private-key: ${{ secrets.rsa_oneline2 }}
-      -   name: Setup SSH Keys and known_hosts
-          env:
-            SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-          run: |
-            mkdir -p ~/.ssh
-            ssh-keyscan github.com >> ~/.ssh/known_hosts
-            ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-            ssh-add - <<< "${{ secrets.rsa_oneline2 }}"
-
+      - name: Install SSH Client
+        uses: webfactory/ssh-agent@v0.2.0
+        with:
+          ssh-private-key: ${{ secrets.i2 }}
       # Locally clone the repository which we want to build with depth of 5 commits
       - name: Checkout the pull request for Machinekit-docs
         uses: actions/checkout@v2
