@@ -131,7 +131,7 @@ jobs:
       - name: Build and Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
-          SS: 'yes'
+          SSH: 'yes'
           ACCESS_TOKEN: ${{ secrets.MKB_DEPLOY_KEY }}
           BRANCH: gh-pages # The branch the action should deploy to. 
           FOLDER: . 
