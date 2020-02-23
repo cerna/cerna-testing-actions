@@ -96,5 +96,6 @@ jobs:
       - name: Push changes to gh-pages
         run: |
           echo "PUSHING..."
-          git push https://${{ secrets.MK_TOKEN }}:${{ secrets.CERNA_TOKEN }}@github.com/cerna/cerna-testing-actions.git HEAD:gh-pages
+          git remote add temporary https://${{ secrets.MK_TOKEN }}:${{ secrets.CERNA_TOKEN }}@github.com/cerna/cerna-testing-actions.git
+          git push temporary gh-pages
         working-directory: ./target
