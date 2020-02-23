@@ -16,7 +16,7 @@ jobs:
     - name: Signal other repository by the message
       uses: peter-evans/repository-dispatch@v1
       with:
-        token: ${{ secrets.CERNA_TOKEN }}
+        token: ${{ secrets. MACHINEKITBOT_TOKEN }}
         repository: cerna/cerna.github.io
         event-type: rebuild-site-now
         client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "authorization": "${{ secrets.KEYCODE }}"}'
