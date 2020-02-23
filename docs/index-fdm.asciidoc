@@ -6,6 +6,8 @@
 
 = FDM/FFF (3D-printing) with Machinekit
 
+BEST PRINTING SOLUTIONS
+
 == Building a 3D-printer configuration
 :leveloffset: +1
 
