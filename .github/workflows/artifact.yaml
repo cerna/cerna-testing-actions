@@ -1,0 +1,53 @@
+name: Rebuild on pull request on master
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  buildMachinekitSite:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Locally clone the repository which we want to build with depth of 5 commits
+      - name: Checkout the pull request for Machinekit-docs
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: to_build
+          fetch-depth: '5'
+
+      - name: Git SHA on which the build is requested
+        run: echo ${{ github.event.pull_request.head.sha }}
+
+      # Locally clone the repository to which the build results will be pushed
+      - name: Checkout this repository, gh-pages branch
+        run: | 
+          mkdir target
+
+      - name: Git log of repository on which the build is requested
+        run: git log
+        working-directory: ./to_build
+
+      # Running the commands in ubuntu-master and not in Docker container because
+      # of the age of the container -> It cannot be even build anymore
+      - name: Run a Jekyll builder
+        run: docker run -v $(pwd)/to_build:/work haberlerm/docker-jekyll-asciidoctor jekyll build --verbose --trace --config _config.yml,_config_devel.yml
+
+      - name: Print newly created files
+        run: ls -R _site -print1
+        working-directory: ./to_build
+
+      - name: Copy the newly generated site to ./target
+        run: cp -r to_build/_site/* target/
+
+      - name: Cretae archive from output pages 
+        run: tar -zcvf machinekit-site-${{ github.sha }}.tar.gz target
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: machinekit-site-${{ github.sha }}.tar.gz
+          path: ./machinekit-site-${{ github.sha }}.tar.gz
+
