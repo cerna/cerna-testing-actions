@@ -22,7 +22,8 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-          ssh-add - <<< "${{ secrets.ukulele1 }}"
+          $ echo “${{ secrets.ukulele1 }}” | ssh-add – > /dev/null
+          #ssh-add - <<< "${{ secrets.ukulele1 }}"
 
 
       # Locally clone the repository which we want to build with depth of 5 commits
