@@ -10,6 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install SSH Client
+        uses: webfactory/ssh-agent@v0.2.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+                
       # Locally clone the repository which we want to build with depth of 5 commits
       - name: Checkout the pull request for Machinekit-docs
         uses: actions/checkout@v2
@@ -127,11 +132,6 @@ jobs:
           cd target
           echo $(pwd)
           git status 
-      
-      - name: Install SSH Client
-        uses: webfactory/ssh-agent@v0.2.0
-        with:
-          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
 
       - name: Build and Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v3
