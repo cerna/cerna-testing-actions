@@ -93,15 +93,15 @@ jobs:
       #    git rebase origin/gh-pages
       #  working-directory: ./target
 
-      - name: Push to Github
-        uses: x-actions/gh-pages@release/v1
-        env:
-          GITHUB_EMAIL: "tower@iont.cz"
-          GITHUB_USERNAME: "cerna"
-          PUBLISH_REPO: https://${{ secrets.CERNA_TOKEN }}@github.com/cerna/cerna-testing-actions.git
-          PUBLISH_BRANCH: gh-pages
-          PUBLISH_DIR: ./target
-          DEPLOY_PRIVATE_KEY: ${{ secrets.MKB_DEPLOY_KEY }}
+      #- name: Push to Github
+      #  uses: x-actions/gh-pages@release/v1
+      #  env:
+      #    GITHUB_EMAIL: "tower@iont.cz"
+      #    GITHUB_USERNAME: "cerna"
+      #    PUBLISH_REPO: https://${{ secrets.CERNA_TOKEN }}@github.com/cerna/cerna-testing-actions.git
+      #    PUBLISH_BRANCH: gh-pages
+      #    PUBLISH_DIR: ./target
+      #    DEPLOY_PRIVATE_KEY: ${{ secrets.MKB_DEPLOY_KEY }}
 
       #- name: Neco
       #  run: |
@@ -118,7 +118,12 @@ jobs:
       #    rm -dr info
       #    cd ..
           
-        
+      - name: Build and Deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          ACCESS_TOKEN: ${{ secrets.MACHINEKITBOT_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: target # The folder the action should deploy.       
 
       #- name: Push changes to gh-pages
       #  run: |
