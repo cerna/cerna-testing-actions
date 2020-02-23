@@ -48,7 +48,7 @@ jobs:
           git status 
         working-directory: ./to_build
 
-        - name: Git log of repository on which the build is requested
+      - name: Git log of repository on which the build is requested
         run: | 
           git log
           git status 
