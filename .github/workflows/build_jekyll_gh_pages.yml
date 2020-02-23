@@ -127,12 +127,16 @@ jobs:
           cd target
           echo $(pwd)
           git status 
+      
+      - name: Install SSH Client
+        uses: webfactory/ssh-agent@v0.2.0
+        with:
+          ssh-private-key: ${{ secrets.MKB_DEPLOY_KEY }}
 
       - name: Build and Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           SSH: 'yes'
-          ACCESS_TOKEN: ${{ secrets.MKB_DEPLOY_KEY }}
           BRANCH: gh-pages # The branch the action should deploy to. 
           FOLDER: . 
 
