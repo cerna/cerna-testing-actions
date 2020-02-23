@@ -1,0 +1,38 @@
+name: Simple and new workflow
+on:
+  push:
+    branches:
+      - mk-docs
+
+jobs:  
+  test_idiocy:
+    runs-on: ubuntu-latest
+    steps:
+          
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: mk-docs
+          persist-credentials: false
+
+      - name: Create folder and file
+        run: |
+          ls -a 
+          mkdir build 
+          ls -a build 
+          touch ./build/file-${{ github.sha }}.txt 
+          ls -a build 
+        
+      - name: Install SSH Client
+      - uses: webfactory/ssh-agent@v0.2.0 # This step installs the ssh client into the workflow run. There's many options available for this on the action marketplace.
+        with:
+          ssh-private-key: ${{ secrets.i2 }}
+
+      - name: Build and Deploy Repo
+        uses: JamesIves/github-pages-deploy-action@releases/v3-test
+        with:
+          BASE_BRANCH: mk-docs   
+          BRANCH: gh-pages
+          FOLDER: build
+          CLEAN: true
+          SSH: true # SSH must be set to true so the deploy action knows which protocol to deploy with.
