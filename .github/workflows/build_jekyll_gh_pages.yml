@@ -93,6 +93,15 @@ jobs:
           git rebase origin/gh-pages
         working-directory: ./target
 
+      - name: Push to Github
+        uses: x-actions/gh-pages@release/v1
+        env:
+          GITHUB_EMAIL: "tower@iont.cz"
+          GITHUB_USERNAME: "cerna"
+          PUBLISH_REPO: https://${{ secrets.CERNA_TOKEN }}@github.com/cerna/cerna-testing-actions.git
+          PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: ./terget
+
       - name: Push changes to gh-pages
         run: |
           echo "PUSHING..."
