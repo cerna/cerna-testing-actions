@@ -96,7 +96,7 @@ jobs:
       - name: Push changes to gh-pages
         run: |
           echo "PUSHING..."
-          git config --global user.name ${{ secrets.MK_TOKEN }}
+          git config --global user.name "cerna"
           git config --global user.email "jakub.fiser@eryaf.com"
           git remote add temporary https://${{ secrets.CERNA_TOKEN }}@github.com/cerna/cerna-testing-actions.git
           git push temporary gh-pages
