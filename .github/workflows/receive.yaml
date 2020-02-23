@@ -1,0 +1,83 @@
+name: TEST ping received
+
+on:
+  repository_dispatch:
+    types: [test-ping]
+
+jobs:
+  buildMachinekitSite:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the change from Machinekit-docs
+        uses: actions/checkout@v2
+        with:
+          repository: cerna/cerna-testing-actions
+          ref: ${{ github.event.client_payload.ref }}
+          path: to_build
+          fetch-depth: '5'
+
+      - name: Git SHA on which the build is requested
+        run: echo ${{ github.event.client_payload.sha }}
+
+      - name: Checkout this repository
+        uses: actions/checkout@v2
+        with:
+          ref: master
+          path: target
+
+      - name: Git log of repository on which the build is requested
+        run: git log
+        working-directory: ./to_build          
+
+      - name: Get last commit author
+        run: |
+          echo "###########################################################"
+          echo "# Commit which will be used for mining of the credentials #"
+          echo "###########################################################"
+          git log -n 2
+          echo ::set-env name=authormail::$(git log --format='%ae' -n 2 ${{ github.event.after }})
+          echo ::set-env name=authorname::$(git log --format='%an' -n 2 ${{ github.event.after }})
+        working-directory: ./to_build
+
+      - name: Set up credentials for the new commit
+        run: |
+          git config --local user.email "$authormail"
+          git config --local user.name "$authorname"
+          echo "Author's name for the commit set to $authorname"
+          echo "Author's mail for the commit set to $authormail"
+        working-directory: ./target
+
+      # Running the commands in ubuntu-master and not in Docker container because
+      # of the age of the container -> It cannot be even build anymore
+      #- name: Run a Jekyll builder
+      #  run: docker run -v $(pwd)/to_build:/work haberlerm/docker-jekyll-asciidoctor jekyll build --verbose --trace --config _config.yml,_config_devel.yml
+
+      - name: test 
+        run: |
+          mkdir _site 
+          touch ${{ github.sha }}.txt 
+        working-directory: ./to_build
+
+      - name: Print newly created files
+        run: ls -R _site -print1
+        working-directory: ./to_build
+
+      - name: Delete all files from ./target
+        run: find . -depth -not \( -path "./.git" -or -path "./.github" -or -path "." -or -path "./.git/*" -or -path "./.github/*" \) -print0 | xargs -0 -t -I '{}' rm  -d '{}'
+        working-directory: ./target
+
+      - name: Copy the newly generated site to ./target
+        run: cp -r to_build/_site/* target/
+
+      - name: Create commit
+        run: |
+          git add --all
+          git commit -m "SHA causing build ${{ github.event.client_payload.SHA }}"
+        working-directory: ./target
+
+      - name: Push changes to master branch
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          directory: target
+          branch: gh-pages
