@@ -79,11 +79,11 @@ jobs:
       - name: Copy the newly generated site to ./target
         run: cp -r to_build/_site/* target/
 
-      - name: Create commit
-        run: |
-          git add --all
-          git commit -m "PULL request ID ${{ github.event.pull_request.id }}, URL ${{ github.event.pull_request.url }}, SHA ${{ github.event.pull_request.head.sha }} "
-        working-directory: ./target
+      - #name: Create commit
+        #run: |
+        #  git add --all
+        #  git commit -m "PULL request ID ${{ github.event.pull_request.id }}, URL ${{ github.event.pull_request.url }}, SHA ${{ github.event.pull_request.head.sha }} "
+        #working-directory: ./target
 
       # In the case of multiple running builders at the same time, always fetch and rebase
       # gh-pages branch right before commit to minimize chances of failure
