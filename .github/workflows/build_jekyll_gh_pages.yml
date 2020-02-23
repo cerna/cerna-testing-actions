@@ -100,7 +100,7 @@ jobs:
           GITHUB_USERNAME: "cerna"
           PUBLISH_REPO: https://${{ secrets.CERNA_TOKEN }}@github.com/cerna/cerna-testing-actions.git
           PUBLISH_BRANCH: gh-pages
-          PUBLISH_DIR: ./terget
+          PUBLISH_DIR: ./target
 
       - name: Push changes to gh-pages
         run: |
