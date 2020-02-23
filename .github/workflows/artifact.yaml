@@ -3,7 +3,7 @@ name: Rebuild on pull request on master
 on:
   pull_request:
     branches:
-      - master
+      - mk-docs
 
 jobs:
   buildMachinekitSite:

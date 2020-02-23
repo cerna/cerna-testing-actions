@@ -19,5 +19,3 @@ jobs:
         token: ${{ secrets.MACHINEKITBOT_TOKEN }}
         event-type: test-ping
         client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
-      env:
-        GITHUB_ACTOR: 'cerna'
