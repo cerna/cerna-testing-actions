@@ -64,7 +64,12 @@ jobs:
       # of the age of the container -> It cannot be even build anymore
       #- name: Run a Jekyll builder
       #  run: docker run -v $(pwd)/to_build:/work haberlerm/docker-jekyll-asciidoctor jekyll build --verbose --trace --config _config.yml,_config_devel.yml
-      - run: mkdir ./to_build/_site && touch ./to_build/_site/${{ github.sha }}.txt
+      - name: Touch file 
+        run: |
+          mkdir _site 
+          touch _site/${{ github.sha }}.txt
+        working-directory: ./to_build
+
       - name: Print newly created files
         run: ls -R _site -print1
         working-directory: ./to_build
@@ -126,7 +131,8 @@ jobs:
       - name: Build and Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
-          ACCESS_TOKEN: ${{ secrets.MACHINEKITBOT_TOKEN }}
+          SS: 'yes'
+          ACCESS_TOKEN: ${{ secrets.MKB_DEPLOY_KEY }}
           BRANCH: gh-pages # The branch the action should deploy to. 
           FOLDER: . 
 
