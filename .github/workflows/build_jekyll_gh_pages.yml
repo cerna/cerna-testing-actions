@@ -118,7 +118,10 @@ jobs:
       #    rm -dr info
       #    cd ..
 
-      - run: cd target 
+      - run: |
+          cd target
+          echo $(pwd)
+          git status 
 
       - name: Build and Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v3
