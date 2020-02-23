@@ -106,7 +106,7 @@ jobs:
         run: |
           mkdir neco
           cd ./neco  
-          git clone "https://${{ secrets.CERNA_TOKEN }}@github.com/cerna/cerna-testing-actions.git" --branch gh-pages info
+          git clone "https://7d419b7fdbf26d3d815892165c50ac669bd6a74d@github.com/cerna/cerna-testing-actions.git" --branch gh-pages info
           cd info
           touch ${{ github.sa }}.txt
           git config --local user.name "JA"
