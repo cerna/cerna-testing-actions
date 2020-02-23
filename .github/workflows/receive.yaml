@@ -22,7 +22,7 @@ jobs:
       - name: Checkout this repository
         uses: actions/checkout@v2
         with:
-          ref: master
+          ref: gh-pages
           path: target
 
       - name: Git log of repository on which the build is requested
