@@ -13,8 +13,8 @@ jobs:
       - name: Install SSH Client
         uses: webfactory/ssh-agent@v0.2.0
         with:
-          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
-                
+          ssh-private-key: '${{ secrets.DEPLOY_KEY }}'
+
       # Locally clone the repository which we want to build with depth of 5 commits
       - name: Checkout the pull request for Machinekit-docs
         uses: actions/checkout@v2
