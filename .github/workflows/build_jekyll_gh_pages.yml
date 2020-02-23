@@ -37,12 +37,14 @@ jobs:
       - name: Checkout this repository, gh-pages branch
         uses: actions/checkout@v2
         with:
-          repository: 'cerna/cerna-testing-actions'
-          ref: gh-pages
           path: target
 
       - name: Git log of repository on which the build is requested
-        run: git log
+        run: | 
+          git log
+          git status 
+          git checkout gh-pages 
+          git status
         working-directory: ./to_build
 
       # The commits pushed to gh-pages branch will appear as originated from the author
