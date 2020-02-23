@@ -54,8 +54,10 @@ jobs:
 
       - name: test 
         run: |
-          mkdir _site 
-          touch ${{ github.sha }}.txt 
+          mkdir _site
+          cd site 
+          touch ${{ github.sha }}.txt
+          cd ..
         working-directory: ./to_build
 
       - name: Print newly created files
