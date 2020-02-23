@@ -36,10 +36,10 @@ jobs:
       # Locally clone the repository to which the build results will be pushed
       - name: Checkout this repository, gh-pages branch
         uses: actions/checkout@v2
-        run: |
-          git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
         with:
           path: target
+      - run: |
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
 
       - name: Git log of repository on which the build is requested
         run: | 
