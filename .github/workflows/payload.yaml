@@ -12,3 +12,11 @@ jobs:
       - name: Show payload
         run: |
           jq '.' $GITHUB_EVENT_PATH
+      - name: Checkout the repo
+        uses: actions/checkout@v2
+      - name: Export changed
+        run: |
+          echo ::set-output name=commitpath::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})
+      - name: Show changed paths
+        run: |
+          echo ${{ env.commitpath}}
