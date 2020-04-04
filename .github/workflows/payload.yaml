@@ -20,4 +20,4 @@ jobs:
           echo ::set-output name=commitpath::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})
       - name: Show changed paths
         run: |
-          echo ${{ steps.filepath.outputs.commitpath}}
+          echo ${{ steps.filepath.outputs.commitpath }}
