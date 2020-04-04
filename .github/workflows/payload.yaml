@@ -15,8 +15,9 @@ jobs:
       - name: Checkout the repo
         uses: actions/checkout@v2
       - name: Export changed
+        id: filepath
         run: |
           echo ::set-output name=commitpath::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})
       - name: Show changed paths
         run: |
-          echo ${{ env.commitpath}}
+          echo ${{ steps.filepath.outputs.commitpath}}
