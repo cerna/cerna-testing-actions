@@ -20,7 +20,7 @@ jobs:
       - name: Run only
         run: |
           git diff-tree --no-commit-id --name-only -r ${{ github.event.before }} ${{ github.sha }}  
-        working-directory: $GITHUB_WORKSPACE/testing
+        working-directory: ./testing
       - name: Export changed
         id: filepath
         run: |
