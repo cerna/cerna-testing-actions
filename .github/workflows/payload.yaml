@@ -16,6 +16,9 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ github.ref }}
+      - name: Run only
+        run: |
+          git diff-tree --no-commit-id --name-only -r ${{ github.event.before }} ${{ github.sha }}  
       - name: Export changed
         id: filepath
         run: |
