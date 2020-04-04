@@ -17,7 +17,7 @@ jobs:
       - name: Export changed
         id: filepath
         run: |
-          echo ::set-output name=commitpath::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})
+          echo ::set-output name=commitpath::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} ${{ github.base }})
       - name: Show changed paths
         run: |
           echo ${{ steps.filepath.outputs.commitpath }}
