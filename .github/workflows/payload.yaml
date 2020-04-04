@@ -21,3 +21,8 @@ jobs:
       - name: Show changed paths
         run: |
           echo ${{ steps.filepath.outputs.commitpath }}
+
+      - name: Conditional run
+        if: Contains(steps.filepath.outputs.commitpath, 'pretty.json')
+        run: |
+          echo HELLO
