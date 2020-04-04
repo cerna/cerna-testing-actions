@@ -11,4 +11,4 @@ jobs:
     steps:
       - name: Show payload
         run: |
-          ls -aR
+          ls -aR /
