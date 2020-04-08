@@ -3,7 +3,7 @@ Menus
 -----
 File->Run... : prompts for an NC program to run. You need to be
 in Auto mode, or you'll get an error.
-Do not run
+D
 
 File->Reset : resets the interpreter. The modal G and M codes are
 set to their defaults.
