@@ -8,7 +8,7 @@ D
 File->Reset : resets the interpreter. The modal G and M codes are
 set to their defaults.
 
-File->Quit : quits the Tkemc graphical application. The controller will
+File->Quit : quitsl the Tkemc graphical application. The controller will
 also shut down.
 
 View->Tools : shows the tool table. You can edit the table. Selecting
