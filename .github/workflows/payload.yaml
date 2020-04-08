@@ -16,6 +16,9 @@ jobs:
       - name: Show size
         run: |
           echo "${{ github.event }}"
+          echo "${{ github.event.ref }}"
+          echo "${{ github.event.size }}"
+          echo "${{ github.event.push.size }}"
       - name: Checkout the repo
         uses: actions/checkout@v2
         with:
