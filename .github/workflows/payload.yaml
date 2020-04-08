@@ -12,6 +12,11 @@ jobs:
       - name: Show payload
         run: |
           jq '.' $GITHUB_EVENT_PATH
+          
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT
 
       - name: Show size
         run: |
