@@ -20,13 +20,13 @@ jobs:
           echo "${{ github.ref }}"
           echo "${{ github.event.size }}"
           echo "${{ github.event.push.size }}"
-          echo "${{ github.event.push.*.size }}"
+          echo "${{ github.event.push.0.size }}"
       - name: Checkout the repo
         uses: actions/checkout@v2
         with:
           ref: ${{ github.event.ref }}
           path: 'testing'
-          fetch-depth: ${{ github.event.size }}
+          #fetch-depth: ${{ github.event.size }}
       - name: Run only
         run: |
           git diff-tree --no-commit-id --name-only -r ${{ github.sha }}  
