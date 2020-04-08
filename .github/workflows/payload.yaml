@@ -29,12 +29,12 @@ jobs:
           #fetch-depth: ${{ github.event.size }}
       - name: Run only
         run: |
-          git diff-tree --no-commit-id --name-only -r ${{ github.sha }}  
+          git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | xargs  
         working-directory: ./testing
       - name: Export changed
         id: filepath
         run: |
-          echo ::set-output name=commitpath::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})
+          echo ::set-output name=commitpath::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | xargs)
         working-directory: ./testing
       - name: Show changed paths
         run: |
