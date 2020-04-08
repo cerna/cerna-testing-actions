@@ -19,7 +19,7 @@ jobs:
       - name: Checkout the repo
         uses: actions/checkout@v2
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ github.event.ref }}
           path: 'testing'
           fetch-depth: ${{ github.event.size }}
       - name: Run only
