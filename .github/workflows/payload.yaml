@@ -19,6 +19,8 @@ jobs:
           echo "${{ github.event.ref }}"
           echo "${{ github.ref }}"
           echo "${{ github.event.size }}"
+          echo "$${{ github.event.size }}"
+          echo $${{ github.event.size }}
           echo "${{ github.event.push.size }}"
           echo "${{ github.event.push.*.size }}"
       - name: Checkout the repo
