@@ -14,7 +14,7 @@ gems:
   - jekyll-toc
   - jekyll-gist
   - jekyll-seo-tag
-  - jekyll-mermaid
+  - jekyll-mermaid2
   - jekyll-plantuml
 
 #url: http://machinekit.io
