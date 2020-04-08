@@ -28,7 +28,7 @@ jobs:
           echo $$${{ github.event.size }}
           echo "${{ github.event.push.size }}"
           echo "${{ github.event.push.*.size }}"
-          jq './commits | lenght' ${{ github.event }}
+          jq './commits | lenght' ${{ github.event_path }}
       - name: Checkout the repo
         uses: actions/checkout@v2
         with:
