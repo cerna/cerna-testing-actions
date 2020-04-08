@@ -12,6 +12,10 @@ jobs:
       - name: Show payload
         run: |
           jq '.' $GITHUB_EVENT_PATH
+
+      - name: Show size
+        run: |
+          echo "${{ github.event.size }}""
       - name: Checkout the repo
         uses: actions/checkout@v2
         with:
