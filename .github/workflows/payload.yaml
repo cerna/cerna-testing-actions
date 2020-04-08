@@ -20,7 +20,7 @@ jobs:
           echo "${{ github.ref }}"
           echo "${{ github.event.size }}"
           echo "${{ github.event.push.size }}"
-          echo "${{ github.event.push.0.size }}"
+          echo "${{ github.event.push.*.size }}"
       - name: Checkout the repo
         uses: actions/checkout@v2
         with:
