@@ -2,7 +2,7 @@ name: Machinekit
 highlighter: pygments
 relative_permalinks: false
 permalink: /blog/:year/:month/:day/:title/
-markdown: kramdown
+markdown: kramdown2
 repository: https://github.com/machinekit/machinekit
 
 gems:
