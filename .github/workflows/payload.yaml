@@ -6,7 +6,7 @@ on:
       - '*'
 env:
   builddockerimage: 'posledni'
-
+  dockerregex: '(.{0,}/payload.yaml)|(.{0,}pretty.json)'
 jobs:
   show:
     runs-on: ubuntu-latest
@@ -35,7 +35,7 @@ jobs:
 
       - name: Check if Docker images related files were changed in this event
         env:
-          DOCKER_REGEX: '(.{0,}/payload.yaml)|(.{0,}pretty.json)'
+          DOCKER_REGEX: ${{ env.dockerregex}}
         run: |
           if [[ ${{ github.event.before }} =~ ^0+$ ]]; then
             printf "This is new branch or tag push\n"
