@@ -42,9 +42,8 @@ jobs:
           CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r ${{ github.event.before }} ${{ github.sha }})
           printf "Found changed files in this push:\n$CHANGED_FILES\n====\n"
           while IFS= read -r line; do
-            echo "$line"
             if [[ $line =~ ${{ env.DOCKER_REGEX }} ]]; then 
-              echo "AHOJ"
+              printf "Found file $line matching the regular expression for Debian builder files\n"
               exit 0
             fi
           done <<< "$CHANGED_FILES"
