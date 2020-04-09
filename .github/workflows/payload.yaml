@@ -20,7 +20,7 @@ jobs:
 
       - name: Test before ${{ github.event.before }}
         run: |
-          if [ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ] then;
+          if [ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ]; then
             echo "This is new branch or tag push"
           fi
 
