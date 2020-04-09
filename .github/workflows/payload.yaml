@@ -37,7 +37,8 @@ jobs:
             echo "This is new branch or tag push"
             exit 0
           fi
-          $(git diff-tree --no-commit-id --name-only -r ${{ github.event.before }} ${{ github.sha }} | xargs)
+          TOECHO=$(git diff-tree --no-commit-id --name-only -r ${{ github.event.before }} ${{ github.sha }})
+          echo "$TOECHO"
         working-directory: ./testing
 
       - name: Show size
