@@ -21,7 +21,7 @@ p = None  # initialized by test_pin_attributes
 
 def test_component_creation():
     global c
-    hal.epsilon[epsindex] = epsval
+    hal.epsilon[epsindex] = epsval1
     c = hal.Component(cname)
     c.newpin(pname, hal.HAL_S32, hal.HAL_OUT, init=42, eps=epsindex)
     c.ready()
