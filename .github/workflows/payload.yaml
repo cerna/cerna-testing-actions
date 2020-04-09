@@ -37,14 +37,15 @@ jobs:
             echo "This is new branch or tag push"
             exit 0
           fi
-          TOECHO=$(git diff-tree --no-commit-id --name-only -r ${{ github.event.before }} ${{ github.sha }})
-          echo "$TOECHO"
+          CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r ${{ github.event.before }} ${{ github.sha }})
+          printf "Found changed files in this push:\n$CHANGED_FILES\n"
           while IFS= read -r line; do
+            echo "$line"
             if [ "$line" == ".github/workflows/payload.yaml" ]; then 
               echo "AHOJ"
               exit 0
             fi
-          done <<< "$TOECHO"
+          done < "$CHANGED_FILES"
           git diff-tree --no-commit-id --name-only -r ${{ github.event.before }} ${{ github.sha }} | xargs -I '{}' bash -c 'if [ "{}" == ".github/workflows/payload.yaml" ]; then echo "AHOJ"; exit 0; fi'
           echo "Shouldn't get there"
         working-directory: ./testing
