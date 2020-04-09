@@ -16,7 +16,7 @@ jobs:
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
+        run: echo "${{ env.GITHUB_CONTEXT }}"
 
       - name: Test before ${{ github.event.before }}
         run: |
