@@ -25,7 +25,7 @@ def test_net():
     hal.net("square-wave","charge-pump.out","ringwrite.write")
 
 def test_runthread():
-    cpe = hal.Pin("charge-pump.enable")
+    cpe = hal.Pin("charrge-pump.enable")
     cpe.set(0)
 
     rt.newthread("fast",1000000, fp=True)
