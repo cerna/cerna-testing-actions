@@ -36,7 +36,7 @@ jobs:
           DOCKER_REGEX: '(.{0,}/payload.yaml)|(.{0,}pretty.json)'
         run: |
           if [[ ${{ github.event.before }} =~ ^0+$ ]]; then
-            echo "This is new branch or tag push"
+            printf "This is new branch or tag push\n"
             exit 0
           fi
           CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r ${{ github.event.before }} ${{ github.sha }})
@@ -44,11 +44,16 @@ jobs:
           while IFS= read -r line; do
             if [[ $line =~ ${{ env.DOCKER_REGEX }} ]]; then 
               printf "Found file $line matching the regular expression for Debian builder files\n"
+              echo ::set-env name=builddockerimage::true
               exit 0
             fi
           done <<< "$CHANGED_FILES"
-          echo "Shouldn't get there"
+          printf "No changes in Debian builder files were found, not going to force rebuild\n"
         working-directory: ./testing
+
+      - name: State of builddockerimage
+        run: |
+          echo "${{ env.builddockerimage }}"
 
       - name: Show size
         run: |
