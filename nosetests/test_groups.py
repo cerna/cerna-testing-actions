@@ -13,7 +13,7 @@ class TestGroup(TestCase):
         hal.epsilon[2] = 0.1
 
     def test_group__ops(self):
-        assert self.g1.userarg1 == 123
+        assert self.g1.userarg1 == 1234
         assert self.g1.userarg2 == 4711
 
         assert len(hal.groups()) == 1
