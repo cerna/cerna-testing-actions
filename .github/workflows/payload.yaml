@@ -39,7 +39,7 @@ jobs:
           fi
           TOECHO=$(git diff-tree --no-commit-id --name-only -r ${{ github.event.before }} ${{ github.sha }})
           echo "$TOECHO"
-          git diff-tree --no-commit-id --name-only -r ${{ github.event.before }} ${{ github.sha }} | xargs -I '{}' bash -c 'if [ "{}" == ".github/workflows/payloda.yaml" ]; then echo "AHOJ"; exit 0 fi'
+          git diff-tree --no-commit-id --name-only -r ${{ github.event.before }} ${{ github.sha }} | xargs -I '{}' bash -c 'if [ "{}" == ".github/workflows/payloda.yaml" ]; then echo "AHOJ" fi'
         working-directory: ./testing
 
       - name: Show size
