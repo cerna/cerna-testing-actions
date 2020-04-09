@@ -43,7 +43,7 @@ jobs:
           printf "Found changed files in this push:\n$CHANGED_FILES\n"
           while IFS= read -r line; do
             echo "$line"
-            if [[ $line =~ ${{ env. DOCKER_REGEX}} ]]; then 
+            if [[ $line =~ ${{ env.DOCKER_REGEX }} ]]; then 
               echo "AHOJ"
               exit 0
             fi
