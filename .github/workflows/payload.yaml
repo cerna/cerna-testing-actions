@@ -18,11 +18,27 @@ jobs:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "${{ env.GITHUB_CONTEXT }}"
 
+      - name: Checkout the repo
+        uses: actions/checkout@v2
+        with:
+          #ref: ${{ github.event.ref }}
+          path: 'testing'
+          fetch-depth: '0'
+
       - name: Test before ${{ github.event.before }}
         run: |
           if [ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ]; then
             echo "This is new branch or tag push"
           fi
+
+      - name: Check if Docker images related files were changed in this event
+        run: |
+          if [ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ]; then
+            echo "This is new branch or tag push"
+            exit 0
+          fi
+          $(git diff-tree --no-commit-id --name-only -r ${{ github.event.before }} ${{ github.sha }} | xargs)
+        working-directory: ${{ github.workspace }}/testing
 
       - name: Show size
         run: |
@@ -36,12 +52,7 @@ jobs:
           echo "${{ github.event.push.size }}"
           echo "${{ github.event.push.*.size }}"
           jq '.commits | length' ${{ github.event_path }}
-      - name: Checkout the repo
-        uses: actions/checkout@v2
-        with:
-          #ref: ${{ github.event.ref }}
-          path: 'testing'
-          fetch-depth: ''
+
       - name: Run only
         run: |
           git diff-tree --no-commit-id --name-only -r ${{ github.event.before }} ${{ github.sha }} | xargs  
