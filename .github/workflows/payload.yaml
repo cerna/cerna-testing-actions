@@ -32,6 +32,8 @@ jobs:
           fi
 
       - name: Check if Docker images related files were changed in this event
+        env:
+          DOCKER_REGEX: '.github/workflows/payload.yaml'
         run: |
           if [ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ]; then
             echo "This is new branch or tag push"
@@ -41,12 +43,11 @@ jobs:
           printf "Found changed files in this push:\n$CHANGED_FILES\n"
           while IFS= read -r line; do
             echo "$line"
-            if [ "$line" == ".github/workflows/payload.yaml" ]; then 
+            if [ $line =~ ${{ env. DOCKER_REGEX}} ]; then 
               echo "AHOJ"
               exit 0
             fi
           done <<< "$CHANGED_FILES"
-          git diff-tree --no-commit-id --name-only -r ${{ github.event.before }} ${{ github.sha }} | xargs -I '{}' bash -c 'if [ "{}" == ".github/workflows/payload.yaml" ]; then echo "AHOJ"; exit 0; fi'
           echo "Shouldn't get there"
         working-directory: ./testing
 
