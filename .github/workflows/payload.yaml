@@ -82,6 +82,6 @@ jobs:
           echo ${{ steps.filepath.outputs.commitpath }}
 
       - name: Conditional run
-        if: Contains(steps.filepath.outputs.commitpath, 'pretty.json')
+        if: ${{ env.buildockerimage }} == 'true'
         run: |
           echo HELLO
