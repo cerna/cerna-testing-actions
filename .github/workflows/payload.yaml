@@ -5,7 +5,7 @@ on:
     branches:
       - '*'
 env:
-  builddockerimage: ''
+  builddockerimage: 'posledni'
 
 jobs:
   show:
