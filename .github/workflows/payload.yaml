@@ -3,7 +3,7 @@ name: Show payload
 on:
   push:
     branches:
-      - 'machinekit'
+      - '*'
 
 jobs:
   show:
