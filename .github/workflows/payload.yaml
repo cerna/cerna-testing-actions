@@ -33,7 +33,7 @@ jobs:
 
       - name: Check if Docker images related files were changed in this event
         env:
-          DOCKER_REGEX: '.github/workflows/payload.yaml'
+          DOCKER_REGEX: './payload.yaml'
         run: |
           if [ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ]; then
             echo "This is new branch or tag push"
