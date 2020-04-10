@@ -42,10 +42,10 @@ jobs:
 
       - name: Try docker download
         run: |
-          docker pull eryaf/mk-cross-builder:arm64_10 &
+          docker pull hello-world:latest &
           last_pid=$!
           echo "$last_pid"
-          sleep 5
+          sleep 3
           EXITCODE=$(ps -ef | grep " $last_pid " | grep -v grep | awk '{print $2}')
           echo "$EXITCODE"
           if [ "$EXITCODE" == "$last_pid" ]; then
