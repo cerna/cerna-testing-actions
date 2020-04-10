@@ -40,6 +40,20 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: "echo 'latest release: ${{ steps.get_latest_release.outputs.data }}'"
 
+      - name: Try docker download
+        run: |
+          docker pull eryaf/mk-cross-builder:arm64_10 &
+          last_pid=$!
+          echo "$last_pid"
+          sleep 5
+          EXITCODE=$(ps -ef | grep " $last_pid " | grep -v grep | awk '{print $2}')
+          echo "$EXITCODE"
+          if [ "$EXITCODE" == "$last_pid" ]; then
+            kill -KILL $last_pid
+          else
+            echo "Package does not exist"
+          fi
+
       - name: Show payload
         run: |
           jq '.' $GITHUB_EVENT_PATH
