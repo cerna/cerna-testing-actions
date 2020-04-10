@@ -135,7 +135,7 @@ jobs:
 
   visible:
     runs-on: ubuntu-latest
-    needs: show
+    #needs: show
 
     steps:
       - name: Is variable exported?
