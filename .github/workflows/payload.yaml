@@ -17,9 +17,11 @@ jobs:
           query: |
             query($login: String!) {
               user(login:$login) {
-                packages(first:10) {
+                registryPackages(first:10, packageType:DOCKER) {
                   nodes {
-                    name             
+                    name
+                    version
+                    packageType          
                     }
                   }
                 }
