@@ -50,6 +50,7 @@ jobs:
           echo "$EXITCODE"
           if [ "$EXITCODE" == "$last_pid" ]; then
             kill -KILL $last_pid
+            echo "Package exists in the registry"
           else
             echo "Package does not exist"
           fi
