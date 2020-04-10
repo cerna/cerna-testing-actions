@@ -16,8 +16,8 @@ jobs:
         with:
           query: |
             query($login: String!) {
-              organization(login:$login) {
-                registryPackages(first:10, packageType:MAVEN) {
+              user(login:$login) {
+                registryPackages(first:10, packageType:DOCKER) {
                   nodes {
                     name             
                     }
