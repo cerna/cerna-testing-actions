@@ -20,8 +20,14 @@ jobs:
                 registryPackages(first:10, packageType:DOCKER) {
                   nodes {
                     name
-                    version
-                    packageType          
+                    packageType
+                    versions(first: 10){
+                      edges {
+                        node {
+                          platform
+                        }
+                      }
+                    }         
                     }
                   }
                 }
