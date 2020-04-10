@@ -15,21 +15,16 @@ jobs:
         id: get_latest_release
         with:
           query: |
-            query release($owner:String!,$repo:String!) {
-              repository(owner:$owner,name:$repo) {
-                registryPackages(name:"cross-builder",first:1) {
+            query($login: String!) {
+              organization(login:$login) {
+                registryPackages(first:10, packageType:MAVEN) {
                   nodes {
-                    versions(last:100) {
-                      nodes {
-                        version
-                        }
-                      }
+                    name             
                     }
                   }
                 }
-              }
-          owner: ${{ github.event.repository.owner.name }}
-          repo: ${{ github.event.repository.name }}
+              }    
+          login: ${{ github.event.repository.owner.name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: "echo 'latest release: ${{ steps.get_latest_release.outputs.data }}'"
