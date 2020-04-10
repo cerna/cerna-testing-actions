@@ -22,6 +22,8 @@ jobs:
                     versions(last:100) {
                       nodes {
                         version
+                        }
+                      }
                     }
                   }
                 }
