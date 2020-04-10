@@ -17,22 +17,24 @@ jobs:
           query: |
             query($login: String!) {
               user(login:$login) {
-                registryPackages(first:10, packageType:DOCKER) {
+                registryPackages(first:5, packageType:DOCKER) {
                   nodes {
                     name
                     packageType
-                    versions(first: 10){
+                    versions(first: 5){
                       edges {
                         node {
                           platform
                           version
+                          summary
+                          readme
                         }
                       }
                     }         
-                    }
                   }
                 }
-              }    
+              }
+            }    
           login: ${{ github.event.repository.owner.name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
