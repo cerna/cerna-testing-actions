@@ -17,7 +17,7 @@ jobs:
           query: |
             query($login: String!) {
               user(login:$login) {
-                registryPackages(first:10, packageType:DOCKER) {
+                packages(first:10) {
                   nodes {
                     name             
                     }
