@@ -25,6 +25,7 @@ jobs:
                       edges {
                         node {
                           platform
+                          version
                         }
                       }
                     }         
