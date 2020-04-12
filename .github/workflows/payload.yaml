@@ -42,12 +42,9 @@ jobs:
 
       - run: "echo 'latest release: ${{ steps.get_latest_release.outputs.data }}'"
 
-      - name: Query GitHub Packages registry for Docker images
-        if: ${{ env.builddockerimage }} != 'true'
-        uses: helaili/github-graphql-action@2.0.1
-        id: get_debian_builders_data
-        with:
-          query: '
+      - name: Create query
+        run: |
+          echo ' 
             query packages($owner: String!, $repository: String!, $packages: [String!]) {
               repository(owner: $owner, name: $repository) {
                 packages(names: $packages, first: 100) {
@@ -61,7 +58,14 @@ jobs:
                   }
                 }
               }
-            }'
+            }' > query.yaml
+
+      - name: Query GitHub Packages registry for Docker images
+        if: ${{ env.builddockerimage }} != 'true'
+        uses: helaili/github-graphql-action@2.0.1
+        id: get_debian_builders_data
+        with:
+          query: query.yaml
           owner: '${{ github.event.repository.owner.name }}'
           repo: ${{ github.event.repository.name }}
           packages: ${{ env.dockerimagesarray }}
