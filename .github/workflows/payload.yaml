@@ -58,11 +58,12 @@ jobs:
         id: get_debian_builders_data
         with:
           query: query.yaml
+          outputFile: q2.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - run: "echo 'latest release: ${{ steps.get_debian_builders_data.outputs.queryResult }}'"
-
+      - run: jq '.' q2.json
       - name: Try docker download
         run: |
           docker pull hello-world:latest &
