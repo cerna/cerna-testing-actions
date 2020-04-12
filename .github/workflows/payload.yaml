@@ -44,21 +44,22 @@ jobs:
 
       - name: Create query
         run: |
-          echo " 
-            'query packages($owner: String!, $repository: String!, $packages: [String!]) {
-              repository(owner: $owner, name: $repository) {
-                packages(names: $packages, first: 100) {
-                  edges {
-                    node {
-                      name
-                      latestVersion {
-                        version
+          echo "
+            query: 
+              'query packages($owner: String!, $repository: String!, $packages: [String!]) {
+                repository(owner: $owner, name: $repository) {
+                  packages(names: $packages, first: 100) {
+                    edges {
+                      node {
+                        name
+                        latestVersion {
+                          version
+                          }
                       }
                     }
                   }
                 }
-              }
-            }' 
+              }' 
             variables:
               owner:
                 type: arg
