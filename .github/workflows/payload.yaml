@@ -48,7 +48,7 @@ jobs:
             query: 
               'query packages($owner: String!, $repository: String!) {
                 repository(owner: $owner, name: $repository) {
-                  packages(names: ["cross-builder"], first: 100) {
+                  packages(first: 100) {
                     edges {
                       node {
                         name
