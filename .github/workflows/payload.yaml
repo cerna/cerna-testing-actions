@@ -46,11 +46,15 @@ jobs:
         run: |
           echo "
             query: 
-              'query {
-                viewer {
+              'query login ($login: String!){
+                repositoryOwner(login: $login){
                   login
                 }
-              }'" > query.yaml
+              }'
+            variables:
+              login:
+                type: arg
+                name: login" > query.yaml
 
       - name: Query GitHub Packages registry for Docker images
         if: ${{ env.builddockerimage }} != 'true'
@@ -59,6 +63,7 @@ jobs:
         with:
           query: query.yaml
           outputFile: q2.json
+          login: "machinekit"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
