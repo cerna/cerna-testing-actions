@@ -79,6 +79,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - run: "echo 'latest release: ${{ steps.get_debian_builders_data.outputs.queryResult }}'"
+
       - name: Try docker download
         run: |
           docker pull hello-world:latest &
