@@ -64,7 +64,7 @@ jobs:
               owner:
                 type: arg
                 name: owner
-              name:
+              repository:
                 type: arg
                 name: name" > query.yaml
 
@@ -74,8 +74,8 @@ jobs:
         id: get_debian_builders_data
         with:
           query: query.yaml
-          owner: '${{ github.event.repository.owner.name }}'
-          repo: ${{ github.event.repository.name }}
+          owner: 'cerna'
+          repository: 'machinekit-hal'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
