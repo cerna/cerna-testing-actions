@@ -105,7 +105,11 @@ jobs:
       - name: Show payload
         run: |
           jq '.' $GITHUB_EVENT_PATH
-
+      
+      - name: Install dotnet-script
+        run: |
+          dotnet tool install -g dotnet-script
+          
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
