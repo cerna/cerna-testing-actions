@@ -46,15 +46,16 @@ jobs:
         run: |
           echo "
             query: 
-              'query($login: String!){
-                repositoryOwner(login: $login){
+              'query(\$login: String!){
+                repositoryOwner(login: \$login){
                   login
                 }
               }'
             variables:
               login:
                 type: arg
-                name: login" > query.yaml
+                name: login
+          " > query.yaml
 
       - name: Query GitHub Packages registry for Docker images
         if: ${{ env.builddockerimage }} != 'true'
