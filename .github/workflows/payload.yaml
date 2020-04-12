@@ -47,7 +47,7 @@ jobs:
         uses: helaili/github-graphql-action@2.0.1
         id: get_debian_builders_data
         with:
-          query: '|
+          query: '
             query packages($owner: String!, $repository: String!, $packages: [String!]) {
               repository(owner: $owner, name: $repository) {
                 packages(names: $packages, first: 100) {
