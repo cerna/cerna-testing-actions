@@ -64,7 +64,8 @@ jobs:
         with:
           query: query.yaml
           outputFile: q2.json
-          login: "machinekit"
+          log: debug
+          login: machinekit
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
