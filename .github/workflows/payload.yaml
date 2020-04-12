@@ -46,7 +46,7 @@ jobs:
         run: |
           echo "
             query: 
-              'query login ($login: String!){
+              'query($login: String!){
                 repositoryOwner(login: $login){
                   login
                 }
