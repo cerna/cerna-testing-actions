@@ -46,7 +46,7 @@ jobs:
         run: |
           echo "
             query: 
-              'query(\$owner: String!, \$repository: String!, \$query: String!) {
+              'query(\$owner: String!, \$repository: String!, \$querystr: String!) {
                 repository(owner: \$owner, name: \$repository) {
                   registryPackagesForQuery(packageType: DOCKER, first: 100, query: \$querystr) {
                     nodes {
