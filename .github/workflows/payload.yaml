@@ -50,7 +50,7 @@ jobs:
                 viewer {
                   login
                 }
-              }" > query.yaml
+              }'" > query.yaml
 
       - name: Query GitHub Packages registry for Docker images
         if: ${{ env.builddockerimage }} != 'true'
