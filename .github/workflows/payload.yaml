@@ -44,8 +44,8 @@ jobs:
 
       - name: Create query
         run: |
-          echo ' 
-            query packages($owner: String!, $repository: String!, $packages: [String!]) {
+          echo " 
+            'query packages($owner: String!, $repository: String!, $packages: [String!]) {
               repository(owner: $owner, name: $repository) {
                 packages(names: $packages, first: 100) {
                   edges {
@@ -58,7 +58,17 @@ jobs:
                   }
                 }
               }
-            }' > query.yaml
+            }' 
+            variables:
+              owner:
+                type: arg
+                name: owner
+              name:
+                type: arg
+                name: name
+              packages:
+                type: arg
+                name: packages" > query.yaml
 
       - name: Query GitHub Packages registry for Docker images
         if: ${{ env.builddockerimage }} != 'true'
