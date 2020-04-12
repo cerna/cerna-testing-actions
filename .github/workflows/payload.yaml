@@ -46,9 +46,9 @@ jobs:
         run: |
           echo "
             query: 
-              'query packages($owner: String!, $repository: String!, $packages: [String!]) {
+              'query packages($owner: String!, $repository: String!) {
                 repository(owner: $owner, name: $repository) {
-                  packages(names: $packages, first: 100) {
+                  packages(names: ["cross-builder"], first: 100) {
                     edges {
                       node {
                         name
@@ -66,10 +66,7 @@ jobs:
                 name: owner
               name:
                 type: arg
-                name: name
-              packages:
-                type: arg
-                name: packages" > query.yaml
+                name: name" > query.yaml
 
       - name: Query GitHub Packages registry for Docker images
         if: ${{ env.builddockerimage }} != 'true'
@@ -79,7 +76,6 @@ jobs:
           query: query.yaml
           owner: '${{ github.event.repository.owner.name }}'
           repo: ${{ github.event.repository.name }}
-          packages: ${{ env.dockerimagesarray }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
