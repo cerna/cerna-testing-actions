@@ -7,7 +7,7 @@ on:
 env:
   builddockerimage: 'posledni'
   dockerregex: '(.{0,}/payload.yaml)|(.{0,}pretty.json)'
-  dockerimagearray: '["cross-builder"]'
+  dockerimagesarray: '["cross-builder"]'
 jobs:
   show:
     runs-on: ubuntu-latest
