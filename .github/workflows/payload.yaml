@@ -46,27 +46,11 @@ jobs:
         run: |
           echo "
             query: 
-              'query packages($owner: String!, $repository: String!) {
-                repository(owner: $owner, name: $repository) {
-                  packages(first: 100) {
-                    edges {
-                      node {
-                        name
-                        latestVersion {
-                          version
-                          }
-                      }
-                    }
-                  }
+              'query {
+                viewer {
+                  login
                 }
-              }' 
-            variables:
-              owner:
-                type: arg
-                name: owner
-              repository:
-                type: arg
-                name: repository" > query.yaml
+              }" > query.yaml
 
       - name: Query GitHub Packages registry for Docker images
         if: ${{ env.builddockerimage }} != 'true'
@@ -74,8 +58,6 @@ jobs:
         id: get_debian_builders_data
         with:
           query: query.yaml
-          owner: 'cerna'
-          repository: 'machinekit-hal'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
