@@ -111,6 +111,53 @@ jobs:
           dotnet tool install -g dotnet-script
           dotnet-script --version
 
+      - name: Create csx
+        run: |
+          echo "
+            #! \"netcoreapp3.1\"
+            #r \"nuget: Newtonsoft.Json, 12.0.3\"
+
+            using System;
+            using System.Collections.Generic;
+            using System.IO;
+            using System.Linq;
+            using System.Text;
+            using Newtonsoft.Json.Linq;
+            public static bool IsNullOrEmpty(this JToken token)
+            {
+                return (token == null) ||
+                       (token.Type == JTokenType.Array && !token.HasValues) ||
+                       (token.Type == JTokenType.Object && !token.HasValues) ||
+                       (token.Type == JTokenType.String && token.ToString() == String.Empty) ||
+                       (token.Type == JTokenType.Null);
+            }
+
+
+            var strq = File.ReadAllText(\"./q2.json\");
+            var ver = new List<string>() { \"amd64_10\" };
+            JObject rss = JObject.Parse(strq);
+
+            JArray packages = (JArray)rss[\"data\"][\"repository\"][\"registryPackagesForQuery\"][\"nodes\"];
+
+            IList<string> packageNames = packages.Where(w => !w[\"version\"].IsNullOrEmpty()).Select(c => (string)c[\"name\"]).ToList();
+
+            foreach (var i in packageNames)
+            {
+                System.Console.WriteLine(i);
+            }
+
+            var b = ver.All(name => packageNames.Any(pkg => pkg.Equals(\"machinekit-hal-debian-builder-v\" + name)));
+            if (b)
+            {
+                System.Console.WriteLine(\"All packages present\");
+            }
+            else { System.Console.WriteLine(\"Not all packages present\"); } 
+            " > script.csx
+
+      - name: Run the script
+        run: |
+          dotnet-script script.csx
+
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
