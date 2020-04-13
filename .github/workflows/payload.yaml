@@ -172,7 +172,7 @@ jobs:
             IMAGESHA=$(jq -r --arg IMAGENAME "$IMAGENAME" '.data.repository.registryPackagesForQuery.nodes[] | select(.name == $IMAGENAME).version.sha256' q2.json)
             if [ -z "$IMAGESHA" ]; then
               printf "Docker image $IMAGENAME does not exist in registry\n"
-              ((MISSING++))
+              ((MISSING=MISSING+1))
             fi
           done
           if [ $MISSING -gt 0 ]; then
