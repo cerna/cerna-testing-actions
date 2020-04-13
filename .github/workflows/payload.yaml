@@ -161,7 +161,8 @@ jobs:
       - name: Cat it 
         run: cat ./script.csx
 
-      - name: Test JSON   
+      - name: Test JSON
+        shell: bash  
         run: |
           test_array=(amd64_8 amd64_9 amd64_10 arm64_9 arm64_10 i386_8 i386_9 i386_10 armhf_8 armhf_9 armhf_10)
           MISSING=0
