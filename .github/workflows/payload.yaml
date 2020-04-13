@@ -114,6 +114,7 @@ jobs:
       - name: Create csx
         run: |
           echo "
+            #!/usr/bin/env dotnet-script
             #! \"netcoreapp3.1\"
             #r \"nuget: Newtonsoft.Json, 12.0.3\"
 
@@ -153,6 +154,7 @@ jobs:
             }
             else { System.Console.WriteLine(\"Not all packages present\"); } 
             " > script.csx
+            chmod +x script.csx
 
       - name: Cat it 
         run: cat ./script.csx
