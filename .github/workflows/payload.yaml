@@ -114,7 +114,7 @@ jobs:
       - name: Create csx
         run: |
           echo "
-            #! /usr/bin/env dotnet script
+            #!/usr/bin/env dotnet-script
             #r \"nuget: Newtonsoft.Json, 12.0.3\"
 
             using System;
