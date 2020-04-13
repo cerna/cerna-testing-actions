@@ -161,7 +161,7 @@ jobs:
 
       - name: Run the script
         run: |
-          dotnet-script ./script.csx
+          /home/runner/.dotnet/tools/dotnet-script ./script.csx
 
       - name: Dump GitHub context
         env:
