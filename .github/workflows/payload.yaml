@@ -115,7 +115,6 @@ jobs:
         run: |
           echo "
             #!/usr/bin/env dotnet-script
-            #! \"netcoreapp3.1\"
             #r \"nuget: Newtonsoft.Json, 12.0.3\"
 
             using System;
