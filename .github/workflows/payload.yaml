@@ -154,6 +154,7 @@ jobs:
             else { System.Console.WriteLine(\"Not all packages present\"); } 
             " > script.csx
             chmod +x script.csx
+            whereis dotnet-script
 
       - name: Cat it 
         run: cat ./script.csx
