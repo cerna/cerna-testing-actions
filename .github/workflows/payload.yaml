@@ -170,11 +170,12 @@ jobs:
             IMAGENAME="machinekit-hal-debian-builder-v$i"
             IMAGESHA=$(jq -r --arg IMAGENAME "$IMAGENAME" '.data.repository.registryPackagesForQuery.nodes[] | select(.name == $IMAGENAME).version.sha256' q2.json)
             if [ -z "$IMAGESHA" ]; then
-              printf "Docker image $IMAGENAME does not exist in registry"
+              printf "Docker image $IMAGENAME does not exist in registry\n"
               ((MISSING++))
             fi
           done
           if [ $MISSING -gt 0 ]; then
+            printf "Rebuilding\n"
           fi
 
       - name: Dump GitHub context
