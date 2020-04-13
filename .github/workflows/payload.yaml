@@ -159,9 +159,21 @@ jobs:
       - name: Cat it 
         run: cat ./script.csx
 
-      - name: Run the script
+      - name: Test JSON   
         run: |
-          /home/runner/.dotnet/tools/dotnet-script ./script.csx
+          test_array=(amd64_8 amd64_9 amd64_10 arm64_9 arm64_10 i386_8 i386_9 i386_10 armhf_8 armhf_9 armhf_10)
+          for i in ${test_array[@]}
+          do
+            echo $i
+            TEMP="machinekit-hal-debian-builder-v$i"
+            echo "$TEMP"
+            SHA=$(jq -r --arg TEMP "$TEMP" '.data.repository.registryPackagesForQuery.nodes[] | select(.name == $TEMP).version.sha256' q2.json)
+            if [ -z "$SHA" ]; then
+              echo "--->Docker image $TEMP does not exist, building"
+            else
+              echo "$SHA"
+            fi
+          done
 
       - name: Dump GitHub context
         env:
