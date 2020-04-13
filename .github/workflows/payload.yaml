@@ -160,7 +160,7 @@ jobs:
 
       - name: Run the script
         run: |
-          dotnet-script script.csx
+          dotnet-script ./script.csx
 
       - name: Dump GitHub context
         env:
