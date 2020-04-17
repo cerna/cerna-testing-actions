@@ -1,10 +1,23 @@
 name: Show payload
 
+
 on:
   push:
     branches:
-      - '*'
+    - '*'
+    tags-ignore:
+    - 'v*'
+
+  pull_request:
+    branches:
+    - '*'
+
 env:
+  CloudSmithToken: ${{ secrets.CLOUDSMITH_TOKEN }}
+  PrivateSigningKey: $ {{ secrets.PRIVATE_SIGNING_KEY }}
+  ImageSuffixArray: 'amd64_8 amd64_9 amd64_10 arm64_9 arm64_10 i386_8 i386_9 i386_10 armhf_8 armhf_9 armhf_10'
+  ImageNameRoot: 'machinekit-hal-debian-builder-v'
+  DockerRegex: ''
   builddockerimage: 'posledni'
   dockerregex: '(.{0,}/payload.yaml)|(.{0,}pretty.json)'
   dockerimagesarray: '["cross-builder"]'
