@@ -22,19 +22,19 @@ jobs:
         run: echo "AHOJ1"
 
       - name: Conditional 2
-        if: Contains(${{ env.BuildDockerImage}}, 'true')
+        if: Contains(${{ env.BuildDockerImage}}, true)
         run: echo "AHOJ2"
 
       - name: Conditional 3
-        if: "!Contains(${{ env.BuildDockerImage}}, 'true')"
+        if: "!Contains(${{ env.BuildDockerImage}}, true)"
         run: echo "AHOJ3"        
 
       - name: Conditional 4
-        if: Contains(${{ env.BuildDockerImage}}, 'false')
+        if: Contains(${{ env.BuildDockerImage}}, false)
         run: echo "AHOJ4"
 
       - name: Conditional 5
-        if: "Contains(${{ env.BuildDockerImage}}, 'true')"
+        if: "Contains(${{ env.BuildDockerImage}}, true)"
         run: echo "AHOJ5" 
 
       - name: Secret secret
