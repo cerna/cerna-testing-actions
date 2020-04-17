@@ -13,6 +13,22 @@ jobs:
   show:
     runs-on: ubuntu-latest
     steps:
+      - name: Set outputFile
+        run: |
+          echo ::set-env name=BuildDockerImage::true
+      
+      - name: Conditional 1
+        if: ${{ env.BuildDockerImage}} == 'true'
+        run: echo "AHOJ1"
+
+      - name: Conditional 2
+        if: Contains(${{ env.BuildDockerImage}}, 'true)
+        run: echo "AHOJ2"
+
+      - name: Conditional 3
+        if: "!Contains(${{ env.BuildDockerImage}}, 'true)"
+        run: echo "AHOJ3"        
+        
       - name: Secret secret
         if: ${{ env.testing }}
         run: |
