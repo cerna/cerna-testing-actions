@@ -9,6 +9,8 @@ env:
   dockerregex: '(.{0,}/payload.yaml)|(.{0,}pretty.json)'
   dockerimagesarray: '["cross-builder"]'
   testing: ${{ secrets.SECRET_SECRET }}
+outputs:
+  builddockerimage: ${{ env.builddockerimage }}
 jobs:
   show:
     runs-on: ubuntu-latest
