@@ -8,10 +8,16 @@ env:
   builddockerimage: 'posledni'
   dockerregex: '(.{0,}/payload.yaml)|(.{0,}pretty.json)'
   dockerimagesarray: '["cross-builder"]'
+  testing: ${{ secrets.SECRET_SECRET }}
 jobs:
   show:
     runs-on: ubuntu-latest
     steps:
+      - name: Secret secret
+        if: ${{ env.testing }} != ''
+        run: |
+          echo "SECRET SECRET"
+          
       - uses: octokit/graphql-action@v2.x
         id: get_latest_release
         with:
