@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Secret secret
-        if: ${{ env.testing }} != ''
+        if: "!(${{ env.testing }} == '')"
         run: |
           echo "SECRET SECRET"
-          
+
       - uses: octokit/graphql-action@v2.x
         id: get_latest_release
         with:
