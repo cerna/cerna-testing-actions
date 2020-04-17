@@ -30,7 +30,7 @@ jobs:
         run: echo "AHOJ3"        
 
       - name: Conditional 4
-        if: Contains(${{ env.BuildDockerImage}}, false)
+        if: "!(${{ env.BuildDockerImage}})"
         run: echo "AHOJ4"
 
       - name: Conditional 5
