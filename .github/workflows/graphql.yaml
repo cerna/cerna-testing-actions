@@ -75,7 +75,7 @@ jobs:
           for i in ${test_array[@]}
           do
             IMAGENAME="${IMAGE_NAME_ROOT}$i"
-            IMAGESHA=$(echo "$INPUT_JSON" | jq -r --arg IMAGENAME "$IMAGENAME" '.repository.registryPackagesForQuery.nodes[] | select(.name == $IMAGENAME).version.sha256')
+            IMAGESHA=contains(INPUT_JSON.repository.registryPackagesForQuery.nodes.*.version.sha256, '$IMAGENAME')
             if [ -z "$IMAGESHA" ]; then
               printf "Docker image $IMAGENAME:latest does not exist in registry docker.pkg.github.com/${{ github.repository }}\n"
               ((MISSING=MISSING+1))
