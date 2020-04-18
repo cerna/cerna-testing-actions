@@ -1,0 +1,36 @@
+name: Testing GraphQL
+
+on:
+  push:
+    branches:
+    - '*'
+
+jobs:
+  graphql:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Query GitHub Packages registry for Docker images
+        if: env.BuildDockerImage != 'true'
+        id: get_debian_builders_data
+        uses: octokit/graphql-action@v2.x
+        with:
+          query: |
+            query($owner: String!, $repository: String!, $querystring: String!) {
+                  repository(owner: $owner, name: $repository) {
+                    registryPackagesForQuery(packageType: DOCKER, first: 100, query: $querystring) {
+                      nodes {
+                        name
+                        version(version: "latest") {
+                          platform
+                          sha256
+                        }
+                      }
+                    }
+                  }
+                }
+          owner: ${{ github.event.repository.owner.name }}
+          repository: ${{ github.event.repository.name }}
+          querystring: 'is:public machinekit-hal-debian-builder-v'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
