@@ -43,6 +43,26 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Test JSON
+        shell: bash  
+        run: |
+          test_array=(amd64_8 amd64_9 amd64_10 arm64_9 arm64_10 i386_8 i386_9 i386_10 armhf_8 armhf_9 armhf_10)
+          MISSING=0
+          for i in ${test_array[@]}
+          do
+            IMAGENAME="machinekit-hal-debian-builder-v$i"
+            IMAGESHA=$(echo "$INPUT_JSON" | jq -r --arg IMAGENAME "$IMAGENAME" '.data.repository.registryPackagesForQuery.nodes[] | select(.name == $IMAGENAME).version.sha256')
+            if [ -z "$IMAGESHA" ]; then
+              printf "Docker image $IMAGENAME:latest does not exist in registry docker.pkg.github.com/${{ github.repository }}\n"
+              ((MISSING=MISSING+1))
+            fi
+          done
+          if [ $MISSING -gt 0 ]; then
+            printf "Rebuilding\n"
+          fi
+        env:
+          INPUT_JSON: ${{ steps.get_debian_builders_data.outputs.data }}
+
       - name: Check if all Debian builder Docker images are present
         if: env.BuildDockerImage != 'true'
         run: |
