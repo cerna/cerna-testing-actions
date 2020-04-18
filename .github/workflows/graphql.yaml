@@ -43,6 +43,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - run: echo "${{ steps.get_debian_builders_data.outputs.data }}"
+
       - name: Test JSON
         shell: bash  
         run: |
