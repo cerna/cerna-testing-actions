@@ -45,6 +45,8 @@ jobs:
 
       - run: |
           echo "${{ steps.get_debian_builders_data2.outputs.data }}"
+          echo "${{ toJson(steps.get_debian_builders_data2.outputs.data) }}"
+          echo "${{ toJson(steps.get_debian_builders_data2.outputs.data) }}" | jq '.'
 
       - name: Create query
         run: |
