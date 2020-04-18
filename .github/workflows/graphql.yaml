@@ -46,7 +46,7 @@ jobs:
       - name: Check if all Debian builder Docker images are present
         if: env.BuildDockerImage != 'true'
         run: |
-          test_array=("$IMAGE_SUFFIX_ARRAY")
+          test_array=(${{ env.IMAGE_SUFFIX_ARRAY }})
           MISSING=0
           for i in ${test_array[@]}
           do
