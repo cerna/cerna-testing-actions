@@ -46,7 +46,6 @@ jobs:
       - run: |
           echo "${{ steps.get_debian_builders_data2.outputs.data }}"
           echo "${{ toJson(steps.get_debian_builders_data2.outputs.data) }}"
-          echo "${{ toJson(steps.get_debian_builders_data2.outputs.data) }}" | jq '.'
 
       - name: Create query
         run: |
@@ -134,4 +133,4 @@ jobs:
         env:
           IMAGE_SUFFIX_ARRAY: ${{ env.ImageSuffixArray }}
           IMAGE_NAME_ROOT: ${{ env.ImageNameRoot }} 
-          INPUT_JSON: ${{ toJson(steps.get_debian_builders_data2.outputs.data) }}    
+          INPUT_JSON: ${{ steps.get_debian_builders_data2.outputs.data }}    
