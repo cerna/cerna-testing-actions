@@ -87,49 +87,6 @@ jobs:
 
       - run: "echo 'latest release: ${{ steps.get_latest_release.outputs.data }}'"
 
-      - name: Create query
-        run: |
-          echo "
-            query: 
-              'query(\$owner: String!, \$repository: String!, \$querystr: String!) {
-                repository(owner: \$owner, name: \$repository) {
-                  registryPackagesForQuery(packageType: DOCKER, first: 100, query: \$querystr) {
-                    nodes {
-                      name
-                      version(version: \"latest\") {
-                        platform
-                        sha256
-                      }
-                    }
-                  }
-                }
-              }'
-            variables:
-              owner:
-                type: arg
-                name: owner
-              repository:
-                type: arg
-                name: repository
-              querystr:
-                type: arg
-                name: querystr
-          " > dockerimagesingithubpackages.yaml
-
-      - name: Query GitHub Packages registry for Docker images
-        if: ${{ env.builddockerimage }} != 'true'
-        uses: helaili/github-graphql-action@2.0.1
-        id: get_debian_builders_data
-        with:
-          query: dockerimagesingithubpackages.yaml
-          outputFile: q2.json
-          logLevel: debug
-          owner: cerna
-          repository: cerna-testing-actions
-          querystr: is:public machinekit-hal-debian-builder-v
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - run: |
           echo 'latest release: ${{ steps.get_debian_builders_data.outputs.queryResult }}'
       
