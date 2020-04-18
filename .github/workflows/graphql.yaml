@@ -65,4 +65,3 @@ jobs:
           IMAGE_SUFFIX_ARRAY: ${{ env.ImageSuffixArray }}
           IMAGE_NAME_ROOT: ${{ env.ImageNameRoot }}
           INPUT_JSON: ${{ steps.get_debian_builders_data.outputs.data }}
-        working-directory: ./github-packages
