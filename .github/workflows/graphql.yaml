@@ -89,6 +89,8 @@ jobs:
           querystr: is:public machinekit-hal-debian-builder-v
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - run: cat q2.json 
 
       - name: Test JSON
         shell: bash  
@@ -98,7 +100,7 @@ jobs:
           for i in ${test_array[@]}
           do
             IMAGENAME="machinekit-hal-debian-builder-v$i"
-            IMAGESHA=$(jq -r --arg IMAGENAME "$IMAGENAME" '.repository.registryPackagesForQuery.nodes[] | select(.name == $IMAGENAME).version.sha256' q2.json)
+            IMAGESHA=$(jq -r --arg IMAGENAME "$IMAGENAME" '.data.repository.registryPackagesForQuery.nodes[] | select(.name == $IMAGENAME).version.sha256' q2.json)
             if [ -z "$IMAGESHA" ]; then
               printf "Docker image $IMAGENAME:latest does not exist in registry docker.pkg.github.com/${{ github.repository }}\n"
               ((MISSING=MISSING+1))
