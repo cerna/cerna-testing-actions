@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Query GitHub Packages registry for Docker images
         if: env.BuildDockerImage != 'true'
-        id: get_debian_builders_data
+        id: get_debian_builders_data2
         uses: octokit/graphql-action@v2.x
         with:
           query: |
