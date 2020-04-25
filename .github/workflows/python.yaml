@@ -43,8 +43,8 @@ jobs:
       with:
         entrypoint: /bin/sh
         args: |
-          python --version && \
-          pip3 install --upgrade cloudsmith-cli && \
+          /usr/local/bin/python --version && \
+          /usr/local/bin/pip3 install --upgrade cloudsmith-cli && \
           cloudsmith help && \
           cloudsmith whoami
   
