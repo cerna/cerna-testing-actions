@@ -24,3 +24,7 @@ jobs:
     - name: Test Cloudsmith CLI
       run: |
         cloudsmith help
+
+    - name: Cloudsmith CLI whoami
+      run: |
+        cloudsmith whoami
