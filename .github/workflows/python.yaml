@@ -41,10 +41,9 @@ jobs:
       env:
         CLOUDSMITH_API_KEY: '${{ secrets.CLOUDSMITH_API_KEY }}'
       with:
-        entrypoint: /bin/sh
         args: |
-          /usr/local/bin/python --version && \
-          /usr/local/bin/pip3 install --upgrade cloudsmith-cli && \
+          python --version && \
+          pip3 install --upgrade cloudsmith-cli && \
           cloudsmith help && \
           cloudsmith whoami
   
