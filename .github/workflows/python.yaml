@@ -43,6 +43,7 @@ jobs:
       with:
         args: |
           pip3 install --upgrade cloudsmith-cli
+          cloudsmith help
   
   pythonC:
     name: kontejner
