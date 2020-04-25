@@ -2,7 +2,7 @@ name: Testing GraphQL
 
 on:
   push:
-    branches:
+    branches-ignore:
     - '*'
 
 env:
