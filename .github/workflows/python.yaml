@@ -1,0 +1,26 @@
+name: Test python Cloudsmith
+
+on:
+  push:
+    branches:
+    - '*'
+
+jobs:
+  pythonTest:
+    name: Python test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Install python
+      uses: actions/setup-python@v1
+      with:
+        python-version: '3.8'
+        architecture: 'x64'
+    
+    - name: Install Cloudsmit CLI
+      run: |
+        pip3 install --upgrade cloudsmith-cli
+    
+    - name: Test Cloudsmith CLI
+      run: |
+        cloudsmith help
