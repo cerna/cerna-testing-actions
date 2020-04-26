@@ -44,7 +44,7 @@ jobs:
         entrypoint: /bin/sh
         args: |
           -c " \
-          pip3 install --upgrade cloudsmith-cli && \
+          pip install --upgrade cloudsmith-cli && \
           cloudsmith help && \
           cloudsmith whoami \
           "
