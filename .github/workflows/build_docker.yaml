@@ -23,3 +23,7 @@ jobs:
         repository: cerna/cerna-testing-actions/basic.image
         tags: latest
         dockerfile: 'build/machinekit-hal/Dockerfile'
+    
+    - name: Docker images
+      run: |
+        docker images
