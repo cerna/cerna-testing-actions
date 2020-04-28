@@ -11,6 +11,7 @@ jobs:
     steps:
     - uses: docker/build-push-action@v1
       with:
+        registry: docker.pkg.github.com
         username: 'cerna'
         password: ${{ secrets.GITHUB_TOKEN }}
         repository: cerna/cerna-testing-actions
