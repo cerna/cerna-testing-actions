@@ -20,6 +20,6 @@ jobs:
         registry: docker.pkg.github.com
         username: 'cerna'
         password: ${{ secrets.GITHUB_TOKEN }}
-        repository: cerna/cerna-testing-actions
+        repository: cerna/cerna-testing-actions/basic.image
         tags: latest
         dockerfile: 'build/machinekit-hal/Dockerfile'
