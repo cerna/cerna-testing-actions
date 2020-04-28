@@ -1,0 +1,17 @@
+name: Basic action
+
+on: 
+  push:
+    branches:
+      - '*'
+
+jobs:
+  buildDocker:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: docker/build-push-action@v1
+      with:
+        username: 'cerna'
+        password: ${{ secrets.GITHUB_TOKEN }}
+        repository: cerna/cerna-testing-actions
+        tags: latest
