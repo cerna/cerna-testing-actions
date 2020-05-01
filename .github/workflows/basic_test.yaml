@@ -16,7 +16,7 @@ jobs:
         x=1
         while [ $x -le 10 ]
         do
-          (exit 1;)
+          (exit 50;)
           VALUE=$?
           echo "$VALUE"
       
