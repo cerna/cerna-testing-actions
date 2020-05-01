@@ -16,13 +16,12 @@ jobs:
         x=1
         while [ $x -le 10 ]
         do
-          coproc exit 49
-          echo "$?"
-          (exit 50;)
-          VALUE=$?
-          echo "$VALUE"
+          coproc { exit 49; }
+          wait $COPROC_PID
+          RETVAL=$?
+          echo "$RETVAL"
       
-          if [ $VALUE -eq 0 ]; then
+          if [ $RETVAL -eq 0 ]; then
             echo "eq 0"
             break
           fi
