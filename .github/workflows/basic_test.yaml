@@ -12,6 +12,7 @@ jobs:
 
     steps:
     - name: Test exit
+      shell: bash
       run: |
         x=1
         while [ $x -le 10 ]
