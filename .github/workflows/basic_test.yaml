@@ -1,0 +1,29 @@
+name: Test python Cloudsmith
+
+on:
+  push:
+    branches:
+    - '*'
+
+jobs:
+  BasicTest:
+    name: Python test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Test exit
+      run: |
+        x=1
+        while [ $x -le 10 ]
+        do
+          (exit 1;)
+          VALUE=$?
+          echo "$VALUE"
+      
+          if [ $VALUE -eq 0 ]; then
+            echo "eq 0"
+            break
+          fi
+          echo "NN"
+          x=$(( $x + 1 ))
+        done
