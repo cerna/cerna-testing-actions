@@ -12,7 +12,7 @@ jobs:
 
     steps:
     - name: Test exit
-      shell: bash -u
+      shell: bash {0} '-u'
       run: |
         x=1
         while [ $x -le 10 ]
