@@ -2,7 +2,7 @@ name: Basic action
 
 on: 
   push:
-    branches:
+    branches-ignore:
       - '*'
 
 jobs:

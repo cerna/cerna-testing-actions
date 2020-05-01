@@ -1,4 +1,4 @@
-name: Test python Cloudsmith
+name: Basic Test
 
 on:
   push:
@@ -16,6 +16,7 @@ jobs:
         x=1
         while [ $x -le 10 ]
         do
+          coproc exit 49
           (exit 50;)
           VALUE=$?
           echo "$VALUE"
